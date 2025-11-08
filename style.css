@@ -17,11 +17,12 @@ body {
 
 /* Header */
 header {
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* break out of centered layout */
   background: #0f1115;
   color: white;
   text-align: center;
   padding: 2.5rem 1rem;
-  border-radius: 0 0 10px 10px;
 }
 
 header h1 {
