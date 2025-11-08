@@ -17,8 +17,7 @@ body {
 
 /* Header */
 header {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
   background: #0f1115;
   color: white;
   text-align: center;
