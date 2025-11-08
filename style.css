@@ -1,3 +1,4 @@
+/* ===== Global Layout ===== */
 body {
   font-family: system-ui, sans-serif;
   margin: 0;
@@ -5,6 +6,7 @@ body {
   color: #222;
 }
 
+/* ===== Header ===== */
 header {
   background: #0d1117;
   color: #fff;
@@ -17,8 +19,9 @@ header h1 {
   margin-bottom: 0.5rem;
 }
 
+/* ===== Main Content ===== */
 main {
-  max-width: 1400px;
+  max-width: 900px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
@@ -28,19 +31,13 @@ main {
   margin-bottom: 1.5rem;
 }
 
+/* ===== Project Cards ===== */
 .project-card {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.project-card.wide {
-  max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  border-radius: 0;
 }
 
 .project-card h3 {
@@ -57,16 +54,50 @@ main {
   text-decoration: underline;
 }
 
-iframe {
-  margin-top: 1rem;
-  border: none;
-  border-radius: 8px;
+/* ===== Full-width Dashboard Section ===== */
+.dashboard-section {
+  width: 100vw; /* full viewport width */
+  margin-left: calc(50% - 50vw); /* break out of centered container */
+  background: white;
+  padding: 2rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.dashboard-section h3 {
+  margin-top: 0;
+}
+
+.dashboard-section iframe {
+  width: 95%;
+  max-width: 1400px;
+  height: 900px;
+  border-radius: 12px;
+  display: block;
+  margin: 1rem auto;
   box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
 
+/* ===== Footer ===== */
 footer {
   text-align: center;
   padding: 1.5rem;
   font-size: 0.9rem;
   color: #666;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .dashboard-section iframe {
+    height: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  .dashboard-section iframe {
+    height: 450px;
+  }
 }
