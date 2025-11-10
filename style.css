@@ -116,8 +116,7 @@ main {
 
 /* Coming Soon card styling */
 .coming-soon {
-  text-align: center;
-  opacity: 0.9;
+  text-align: left;
 }
 
 .coming-soon h3 {
