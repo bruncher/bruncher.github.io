@@ -89,6 +89,7 @@ main {
   background: #fff;
   border-radius: 12px;
   padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -99,14 +100,28 @@ main {
 
 .project-card p {
   color: #444;
+  margin-bottom: 0.75rem;
 }
 
-.status-card {
-  margin-top: 1rem;
-  background: #f1f4f8;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  font-size: 0.95rem;
+/* Links (GitHub etc.) */
+.btn-link {
+  display: inline-block;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.btn-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* Optional status note */
+.status-note {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.3rem;
 }
 
 /* Footer */
@@ -134,5 +149,9 @@ footer a:hover {
 
   .dashboard-section iframe {
     height: 420px;
+  }
+
+  .project-card {
+    padding: 1.2rem 1.5rem;
   }
 }
