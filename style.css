@@ -7,27 +7,23 @@
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: #f7f9fc;
+  background: #f6f7fb;
   color: #222;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-/* Hero Section */
+/* Hero */
 .hero {
-  text-align: center;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   background: linear-gradient(90deg, #111827, #1f2937);
   color: white;
+  text-align: center;
   padding: 3rem 1rem;
-  border-radius: 1rem;
-  margin-bottom: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.8s ease-out forwards;
 }
 
 .hero h1 {
@@ -40,47 +36,45 @@ body {
   opacity: 0.9;
 }
 
-/* Header (Crypto Overview) */
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Main */
+main {
+  width: 100%;
+  max-width: 1100px;
+  padding: 2rem 1rem 4rem;
 }
 
-.header h1 {
-  font-size: 2rem;
+/* Section headers */
+.projects h2 {
+  text-align: center;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
 }
 
-.header p {
+.project-subtitle {
+  text-align: center;
   color: #555;
+  margin-bottom: 1.5rem;
 }
 
-/* Dashboard Card */
+/* Dashboard section */
 .dashboard-section {
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
 }
 
-.dashboard-card {
-  width: 100%;
-  max-width: 1000px;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  padding: 1rem;
-  overflow: visible; /* allows Looker watermark */
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-.looker-embed {
-  width: 100%;
-  height: 580px; /* adjusted to show watermark */
+.dashboard-section iframe {
+  width: 1100px;
+  max-width: 100%;
+  height: 700px;
   border: none;
-  border-radius: 0.75rem;
-  overflow: visible;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .update-note {
@@ -90,24 +84,20 @@ body {
   margin-top: 0.75rem;
 }
 
-/* Data Collector Service */
-.service-section {
-  margin-top: 2.5rem;
-}
-
-.service-card {
-  background: white;
-  border-radius: 1rem;
+/* Project cards */
+.project-card {
+  background: #fff;
+  border-radius: 12px;
   padding: 1.5rem 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.service-card h2 {
-  font-size: 1.5rem;
+.project-card h3 {
   margin-bottom: 0.5rem;
+  font-size: 1.4rem;
 }
 
-.service-card p {
+.project-card p {
   color: #444;
 }
 
@@ -119,10 +109,30 @@ body {
   font-size: 0.95rem;
 }
 
-/* Animation */
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #0077ff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-section iframe {
+    height: 420px;
   }
 }
