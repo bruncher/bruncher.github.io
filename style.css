@@ -155,3 +155,51 @@ footer a:hover {
     padding: 1.2rem 1.5rem;
   }
 }
+
+/* Remove overflow scroll bars */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Fix duplicated card layout spacing */
+.project-card + .project-card {
+  margin-top: 1.5rem;
+}
+
+/* Shimmer loading overlay */
+.iframe-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: #f6f7fb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #666;
+  animation: fadeOut 1s ease 3s forwards;
+}
+
+.shimmer {
+  width: 80%;
+  height: 10px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f6f7fb 25%, #e0e0e0 50%, #f6f7fb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
