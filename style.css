@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: "Inter", system-ui, sans-serif;
   background: #f6f7fb;
@@ -36,7 +40,7 @@ body {
   opacity: 0.9;
 }
 
-/* Main */
+/* Main Layout */
 main {
   width: 100%;
   max-width: 1100px;
@@ -77,13 +81,6 @@ main {
   overflow: hidden;
 }
 
-.update-note {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.75rem;
-}
-
 /* Project cards */
 .project-card {
   background: #fff;
@@ -103,7 +100,7 @@ main {
   margin-bottom: 0.75rem;
 }
 
-/* Links (GitHub etc.) */
+/* Button links (e.g., GitHub) */
 .btn-link {
   display: inline-block;
   color: #2563eb;
@@ -117,11 +114,14 @@ main {
   text-decoration: underline;
 }
 
-/* Optional status note */
-.status-note {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.3rem;
+/* Coming Soon card styling */
+.coming-soon {
+  text-align: center;
+  opacity: 0.9;
+}
+
+.coming-soon h3 {
+  color: #222;
 }
 
 /* Footer */
@@ -154,52 +154,4 @@ footer a:hover {
   .project-card {
     padding: 1.2rem 1.5rem;
   }
-}
-
-/* Remove overflow scroll bars */
-html, body {
-  overflow-x: hidden;
-}
-
-/* Fix duplicated card layout spacing */
-.project-card + .project-card {
-  margin-top: 1.5rem;
-}
-
-/* Shimmer loading overlay */
-.iframe-wrapper {
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  background: #f6f7fb;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-  color: #666;
-  animation: fadeOut 1s ease 3s forwards;
-}
-
-.shimmer {
-  width: 80%;
-  height: 10px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #f6f7fb 25%, #e0e0e0 50%, #f6f7fb 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
 }
