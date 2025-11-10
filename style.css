@@ -9,9 +9,10 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Background – slightly darker for contrast */
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: #f6f7fb;
+  background: #f1f2f6; /* was #f6f7fb — a touch darker, softer tone */
   color: #222;
   line-height: 1.6;
   display: flex;
@@ -79,12 +80,12 @@ main {
   margin: 0 auto;
 }
 
-/* Project cards */
+/* Project cards – same white but more spacing between them */
 .project-card {
   background: #fff;
   border-radius: 12px;
   padding: 1.5rem 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem; /* was 1.5rem */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -112,9 +113,14 @@ main {
   text-decoration: underline;
 }
 
-/* Coming Soon card styling */
+/* Coming soon card – match spacing and shadow */
 .coming-soon {
-  text-align: left;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: left; /* keep aligned with other cards */
 }
 
 .coming-soon h3 {
