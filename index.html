@@ -3,69 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Portfolio | Dashboards & Analytics</title>
+
+  <!-- SEO Meta -->
+  <meta name="description" content="Portfolio showcasing interactive dashboards, crypto analytics, and live data visualization projects." />
+  <meta name="keywords" content="data analytics, dashboard, visualization, crypto, Looker Studio, portfolio" />
+  <meta name="author" content="bruncher" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Dashboards & Analytics Portfolio" />
+  <meta property="og:description" content="Explore interactive dashboards and live analytics projects powered by public APIs." />
+  <meta property="og:image" content="https://bruncher.github.io/favicon.png" />
+  <meta property="og:url" content="https://bruncher.github.io" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png" />
   <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Data and analytics portfolio — live dashboards.">
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="container">
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>👋 Hi, please check out my porfolio.</h1>
-      <p>I create data insights solutions.</p>
-    </section>
+  <!-- Hero Banner -->
+  <header class="hero">
+    <h1>👋 Hi, please check out my portfolio.</h1>
+    <p>I create business insights solutions.</p>
+  </header>
 
-    <!-- Crypto Overview -->
-    <header class="header">
-      <h1>📊 Crypto Market Overview</h1>
-      <p>Live data visualized from CoinGecko API, updated every 15 minutes.</p>
-    </header>
+  <main>
 
-    <!-- Looker Dashboard Embed -->
-    <section class="dashboard-section">
-      <div class="dashboard-card fade-in">
+    <!-- Project Section -->
+    <section class="projects">
+      <h2>📊 Crypto Market Overview</h2>
+      <p class="project-subtitle">Live data visualized from CoinGecko API, updated every 15 minutes.</p>
+
+      <div class="dashboard-section">
         <iframe 
-          src="https://lookerstudio.google.com/embed/reporting/XXXXXXXX/page/XXXX"
+          src="https://lookerstudio.google.com/embed/reporting/60f65be9-a823-4be3-81eb-75305ac2085e/page/6BSeF"
           frameborder="0" 
           allowfullscreen 
-          loading="lazy"
-          class="looker-embed">
+          loading="lazy">
         </iframe>
         <p class="update-note">Updated every 15 minutes</p>
       </div>
     </section>
 
     <!-- Data Collector Section -->
-    <section class="service-section">
-      <div class="service-card">
-        <h2>🧩 Data Collector Service</h2>
-        <p>Node.js service for fetching and caching live crypto data from public APIs.</p>
+    <section class="project-card">
+      <h3>🧩 Data Collector Service</h3>
+      <p>Node.js service for fetching and caching live crypto data from public APIs.</p>
 
-        <div class="status-card" id="status-card">
-          <p><strong>Status:</strong> <span id="status-text">Loading...</span></p>
-          <p><strong>Last Fetch:</strong> <span id="last-fetch">–</span></p>
-          <p><strong>Cache Age (sec):</strong> <span id="cache-age">–</span></p>
-        </div>
+      <div class="status-card" id="status-card">
+        <p><strong>Status:</strong> <span id="status-text">Loading...</span></p>
+        <p><strong>Last Fetch:</strong> <span id="last-fetch">–</span></p>
+        <p><strong>Cache Age (sec):</strong> <span id="cache-age">–</span></p>
       </div>
     </section>
+
   </main>
 
+  <footer>
+    <p>Updated 2025 — Built with Looker Studio & Node.js</p>
+  </footer>
+
   <script>
-    // Health check for backend
     async function checkHealth() {
       try {
         const res = await fetch("https://your-render-app.onrender.com/health");
         const data = await res.json();
-
         document.getElementById("status-text").textContent = data.status || "unknown";
         document.getElementById("last-fetch").textContent = data.lastFetch || "n/a";
         document.getElementById("cache-age").textContent = data.cacheAgeSec ?? "n/a";
-      } catch (err) {
+      } catch {
         document.getElementById("status-text").textContent = "error";
       }
     }
