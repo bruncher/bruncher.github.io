@@ -5,8 +5,9 @@
   box-sizing: border-box;
 }
 
-html, body {
-  overflow-x: hidden; /* ✅ Prevents any horizontal scroll */
+html,
+body {
+  overflow-x: hidden; /* ✅ Prevent horizontal scroll */
 }
 
 body {
@@ -55,7 +56,7 @@ main {
 .dashboard-section {
   background: #fff;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem; /* ✅ reduced bottom padding */
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   text-align: center;
@@ -71,15 +72,24 @@ main {
   margin-bottom: 0.8rem;
 }
 
+/* Wrapper to trim white space from iframe */
+.iframe-wrapper {
+  overflow: hidden; /* ✅ clips any internal Looker Studio margin */
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+
+/* Embedded Looker iframe */
 .dashboard-section iframe {
-  width: 1100px;     /* matches your Looker canvas width */
-  max-width: 100%;   /* stays responsive on smaller screens */
-  height: 700px;     /* exact Looker height */
+  width: 1100px; /* matches Looker canvas */
+  max-width: 100%;
+  height: 700px; /* default desktop height */
   border: none;
   border-radius: 8px;
   display: block;
-  margin: 0 auto;
-  overflow: hidden;  /* removes internal scrollbars */
+  margin: 0 auto -10px; /* ✅ visually trims bottom gap */
+  overflow: hidden;
+  vertical-align: bottom; /* prevents inline spacing */
 }
 
 /* Project cards */
@@ -139,6 +149,12 @@ footer a:hover {
   }
 
   .dashboard-section iframe {
-    height: 400px;
+    height: 420px; /* smaller embed for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-section iframe {
+    height: 360px;
   }
 }
