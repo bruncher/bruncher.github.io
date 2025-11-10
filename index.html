@@ -33,8 +33,7 @@
   </header>
 
   <main>
-
-    <!-- Project Section -->
+    <!-- Dashboard Section -->
     <section class="projects">
       <h2>📊 Crypto Market Overview</h2>
       <p class="project-subtitle">Live data visualized from CoinGecko API, updated every 15 minutes.</p>
@@ -46,7 +45,6 @@
           allowfullscreen 
           loading="lazy">
         </iframe>
-        <p class="update-note">Updated every 15 minutes</p>
       </div>
     </section>
 
@@ -55,13 +53,23 @@
       <h3>🧩 Data Collector Service</h3>
       <p>Node.js service for fetching and caching live crypto data from public APIs.</p>
 
-      <div class="status-card" id="status-card">
-        <p><strong>Status:</strong> <span id="status-text">Loading...</span></p>
-        <p><strong>Last Fetch:</strong> <span id="last-fetch">–</span></p>
-        <p><strong>Cache Age (sec):</strong> <span id="cache-age">–</span></p>
-      </div>
+    <section class="project-card">
+      <h3>💾 Data Collector Service</h3>
+      <p>
+      Node.js microservice that fetches, caches, and serves crypto market data from the
+      <a href="https://www.coingecko.com/en/api" target="_blank" rel="noopener">CoinGecko API</a>.
+      It powers the dashboard above with live data every 15 minutes.
+      </p>
+      <a class="btn-link" href="https://github.com/bruncher/coingecko-wrapper" target="_blank" rel="noopener">
+      View on GitHub →
+      </a>
     </section>
-
+      
+    <!-- Coming Soon Section -->
+    <section class="project-card">
+      <h3>📈 (Coming Soon)</h3>
+      <p>More analytics and visualization projects.</p>
+    </section>
   </main>
 
   <footer>
@@ -77,7 +85,7 @@
         document.getElementById("last-fetch").textContent = data.lastFetch || "n/a";
         document.getElementById("cache-age").textContent = data.cacheAgeSec ?? "n/a";
       } catch {
-        document.getElementById("status-text").textContent = "error";
+        document.getElementById("status-text").textContent = "offline";
       }
     }
     checkHealth();
