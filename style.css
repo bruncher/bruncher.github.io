@@ -150,8 +150,10 @@ footer a:hover {
     font-size: 1.8rem;
   }
 
+  /* Shrink Looker Studio dashboard on mobile */
   .dashboard-section iframe {
-    height: 420px;
+    height: 50vh; /* scales dynamically with screen height */
+    max-height: 500px; /* prevents it from getting too tall */
   }
 
   .project-card {
