@@ -71,7 +71,7 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Dashboard iframe – tuned heights for desktop / tablet 
+/* Dashboard iframe – tuned heights for desktop / tablet */
 .dashboard-section iframe {
   width: 100%;
   max-width: 100%;
@@ -80,7 +80,7 @@ main {
   display: block;
   margin: 0 auto;
   height: 640px; /* stays fine for desktop */
-} */
+}
 
 /* Project cards – same white but more spacing between them */
 .project-card {
@@ -146,40 +146,34 @@ footer a:hover {
   text-decoration: underline;
 }
 
-.iframe-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  border-radius: 12px;
-  overflow: hidden; /* hides any scroll inside iframe */
-  background: white;
-}
-
-/* Default desktop look */
-.iframe-wrapper iframe {
-  width: 100%;
-  height: 450px; /* slightly less to remove bottom gap */
-  border: 0;
-  display: block;
-  overflow: hidden;
-  scrollbar-width: none;
-  pointer-events: auto;
-}
-.iframe-wrapper iframe::-webkit-scrollbar {
-  display: none;
-}
-
-/* Tablet */
+/* Mobile fix */
 @media (max-width: 768px) {
-  .iframe-wrapper iframe {
-    height: 400px;
+  .dashboard-section {
+    padding: 0.5rem 1rem;
+    overflow: hidden; /* prevent white gap & iframe scrollbars */
   }
-}
 
-/* Mobile (e.g. Galaxy A5) */
-@media (max-width: 480px) {
+  .iframe-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* maintains aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
   .iframe-wrapper iframe {
-    height: 360px; /* trimmed tighter */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .hero {
+    padding: 2.5rem 1rem;
   }
 }
