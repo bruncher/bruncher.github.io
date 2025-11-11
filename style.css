@@ -163,3 +163,11 @@ footer a:hover {
     padding: 1.2rem 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .dashboard-section iframe {
+    height: 80vh; /* taller relative to screen */
+    max-height: none;
+    overflow: hidden; /* hides internal scroll if supported */
+  }
+}
