@@ -150,24 +150,13 @@ footer a:hover {
     font-size: 1.8rem;
   }
 
-  /* Fix Looker dashboard height and internal scroll */
+  /* Keep Looker Studio chart visible but not huge */
   .dashboard-section iframe {
-    width: 100%;
-    aspect-ratio: 16 / 10; /* try 16:10 for charts; tweak if still too tall */
-    height: auto;          /* let aspect-ratio control height */
-    border: none;
-    overflow: hidden;
+    height: 600px; /* fixed, stable height */
+    max-height: 600px;
   }
 
   .project-card {
     padding: 1.2rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .dashboard-section iframe {
-    height: 80vh; /* taller relative to screen */
-    max-height: none;
-    overflow: hidden; /* hides internal scroll if supported */
   }
 }
