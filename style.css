@@ -148,18 +148,18 @@ footer a:hover {
 
 /* Mobile fix */
 @media (max-width: 768px) {
+  .dashboard-section {
+    padding: 0.5rem 1rem;
+    overflow: hidden; /* prevent white gap & iframe scrollbars */
+  }
+
   .iframe-wrapper {
     position: relative;
     width: 100%;
+    padding-bottom: 75%; /* maintains aspect ratio */
+    height: 0;
     overflow: hidden;
     border-radius: 8px;
-  }
-
-  /* Set a responsive aspect ratio based on chart shape */
-  .iframe-wrapper::before {
-    content: "";
-    display: block;
-    padding-top: 125%; /* tweak: taller = larger iframe height */
   }
 
   .iframe-wrapper iframe {
@@ -170,10 +170,7 @@ footer a:hover {
     height: 100%;
     border: 0;
     border-radius: 8px;
-  }
-
-  .dashboard-section {
-    padding: 0.5rem 1rem;
+    display: block;
   }
 
   .hero {
