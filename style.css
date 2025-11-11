@@ -150,10 +150,13 @@ footer a:hover {
     font-size: 1.8rem;
   }
 
-  /* Adjust Looker Studio dashboard height for mobile */
+  /* Fix Looker dashboard height and internal scroll */
   .dashboard-section iframe {
-    height: 75vw;       /* scales with screen width instead of height */
-    max-height: 420px;  /* keeps it compact */
+    width: 100%;
+    aspect-ratio: 16 / 10; /* try 16:10 for charts; tweak if still too tall */
+    height: auto;          /* let aspect-ratio control height */
+    border: none;
+    overflow: hidden;
   }
 
   .project-card {
