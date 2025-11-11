@@ -146,17 +146,30 @@ footer a:hover {
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
+  /* Debug: show that mobile styles are active */
+  body::after {
+    content: "MOBILE VIEW";
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: black;
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    z-index: 9999;
+  }
+
   .hero h1 {
-    font-size: 1.8rem;
+    font-size: 1.8rem !important;
   }
 
   /* Shrink Looker Studio dashboard on mobile */
   .dashboard-section iframe {
-    height: 50vh; /* scales dynamically with screen height */
-    max-height: 500px; /* prevents it from getting too tall */
+    height: 50vh !important; /* dynamically scales */
+    max-height: 500px !important; /* caps height */
   }
 
   .project-card {
-    padding: 1.2rem 1.5rem;
+    padding: 1.2rem 1.5rem !important;
   }
 }
