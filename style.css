@@ -71,7 +71,7 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Dashboard iframe – tuned heights for desktop / tablet */
+/* Dashboard iframe – tuned heights for desktop / tablet 
 .dashboard-section iframe {
   width: 100%;
   max-width: 100%;
@@ -80,7 +80,7 @@ main {
   display: block;
   margin: 0 auto;
   height: 640px; /* stays fine for desktop */
-}
+} */
 
 /* Project cards – same white but more spacing between them */
 .project-card {
@@ -146,34 +146,38 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Mobile fix */
+.iframe-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+/* Default desktop look */
+.iframe-wrapper iframe {
+  width: 100%;
+  height: 480px; /* fits your Looker chart tightly */
+  border: 0;
+  display: block;
+  overflow: hidden;
+  scrollbar-width: none;
+}
+.iframe-wrapper iframe::-webkit-scrollbar {
+  display: none;
+}
+
+/* Adjust height for smaller screens */
 @media (max-width: 768px) {
-  .dashboard-section {
-    padding: 0.5rem 1rem;
-    overflow: hidden; /* prevent white gap & iframe scrollbars */
-  }
-
-  .iframe-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 75%; /* maintains aspect ratio */
-    height: 0;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-
   .iframe-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    border-radius: 8px;
-    display: block;
+    height: 420px; /* tighter for mobile */
   }
+}
 
-  .hero {
-    padding: 2.5rem 1rem;
+@media (max-width: 480px) {
+  .iframe-wrapper iframe {
+    height: 390px; /* near-perfect fit for Galaxy A5 range */
   }
 }
