@@ -148,27 +148,22 @@ footer a:hover {
 
 /* mobile / small tablet fix */
 @media (max-width: 768px) {
+  /* Remove the fixed aspect ratio and absolute positioning */
   .iframe-wrapper {
     position: relative;
     width: 100%;
-    padding-top: 60%; /* tweak until chart fills nicely */
+    padding-top: 0; /* remove the 60% ratio */
     overflow: hidden;
     border-radius: 8px;
   }
 
   .iframe-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: static; /* revert absolute positioning */
     width: 100%;
-    height: 100%;
+    height: 600px; /* start with 600px — we’ll tweak if needed */
     border: 0;
     border-radius: 8px;
-  }
-
-  /* remove fixed heights on mobile */
-  .dashboard-section iframe {
-    height: auto;
+    display: block;
   }
 
   .dashboard-section {
