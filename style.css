@@ -28,18 +28,13 @@ body {
   background: linear-gradient(90deg, #111827, #1f2937);
   color: white;
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 1.75rem 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .hero h1 {
-  font-size: 2.3rem;
-  margin-bottom: 0.75rem;
-}
-
-.hero p {
-  font-size: 1.1rem;
-  opacity: 0.9;
+  font-size: 2rem;
+  margin-bottom: 0;
 }
 
 /* Main Layout */
@@ -174,7 +169,7 @@ footer a:hover {
   }
 
   .hero {
-    padding: 2.5rem 1rem;
+    padding: 1.25rem 1rem;
   }
 }
 
