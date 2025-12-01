@@ -69,11 +69,9 @@ main {
 /* Dashboard iframe – tuned heights for desktop / tablet */
 .dashboard-section iframe {
   width: 100%;
-  max-width: 100%;
   border: none;
   border-radius: 8px;
   display: block;
-  margin: 0 auto;
   height: 640px; /* stays fine for desktop */
 }
 
