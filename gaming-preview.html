@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gaming Deals Preview</title>
 <link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:,">
 
 <!-- React via ESM -->
 <script type="module" crossorigin>
@@ -20,7 +21,7 @@ function GamingTable() {
       try {
         const res = await fetch("https://gaming-api-4ic4.onrender.com/deals");
         const json = await res.json();
-        setData(json.deals || []); // your endpoint returns { deals: [...] }
+        setData(json.deals || []);
       } catch (e) {
         console.error(e);
       } finally {
@@ -31,23 +32,26 @@ function GamingTable() {
   }, []);
 
   if (loading) return <p style={{ textAlign: "center" }}>Loading…</p>;
+  if (!data.length) return <p style={{ textAlign: "center" }}>No deals found.</p>;
 
   return (
     <div style={{ overflowX: "auto", marginTop: "1rem" }}>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            <th style={{ textAlign: "left", padding: "8px" }}>Title</th>
-            <th style={{ textAlign: "left", padding: "8px" }}>Store</th>
-            <th style={{ textAlign: "left", padding: "8px" }}>Price</th>
+            <th>Thumb</th>
+            <th>Title</th>
+            <th>Store</th>
+            <th>Price</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
+          {data.map(item => (
             <tr key={item.dealID}>
-              <td style={{ padding: "8px" }}>{item.title}</td>
-              <td style={{ padding: "8px" }}>{item.storeName}</td>
-              <td style={{ padding: "8px" }}>${item.salePrice}</td>
+              <td><img src={item.thumb} alt={item.title} style={{ height: "50px" }} /></td>
+              <td>{item.title}</td>
+              <td>{item.storeName}</td>
+              <td>${item.salePrice}</td>
             </tr>
           ))}
         </tbody>
