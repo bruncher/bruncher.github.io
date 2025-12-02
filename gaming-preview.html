@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gaming Deals Preview</title>
+<link rel="stylesheet" href="style.css" />
+
+<!-- React via ESM -->
+<script type="module" crossorigin>
+import React from "https://esm.sh/react@18";
+import { createRoot } from "https://esm.sh/react-dom@18/client";
+
+function GamingTable() {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("https://gaming-api-4ic4.onrender.com/deals");
+        const json = await res.json();
+        setData(json.deals || []); // your endpoint returns { deals: [...] }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  if (loading) return <p style={{ textAlign: "center" }}>Loading…</p>;
+
+  return (
+    <div style={{ overflowX: "auto", marginTop: "1rem" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left", padding: "8px" }}>Title</th>
+            <th style={{ textAlign: "left", padding: "8px" }}>Store</th>
+            <th style={{ textAlign: "left", padding: "8px" }}>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.dealID}>
+              <td style={{ padding: "8px" }}>{item.title}</td>
+              <td style={{ padding: "8px" }}>{item.storeName}</td>
+              <td style={{ padding: "8px" }}>${item.salePrice}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const root = createRoot(document.getElementById("app"));
+  root.render(<GamingTable />);
+});
+</script>
+</head>
+<body>
+<main style="max-width: 1100px; padding: 2rem 1rem; margin: 0 auto;">
+  <h1 style="text-align:center; margin-bottom: 1rem;">Gaming Deals Preview</h1>
+  <p style="text-align:center; color:#555;">This page is not linked publicly — safe to experiment.</p>
+  <div id="app"></div>
+</main>
+</body>
+</html>
