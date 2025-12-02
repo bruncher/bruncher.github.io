@@ -21,9 +21,14 @@ function GamingTable() {
       try {
         const res = await fetch("https://gaming-api-4ic4.onrender.com/deals");
         const json = await res.json();
+  
+        console.log("API response:", json); // <-- log it to see what's coming back
+  
+        // Make sure to setData to the deals array if it exists
         setData(json.deals || []);
       } catch (e) {
-        console.error(e);
+        console.error("Error fetching deals:", e);
+        setData([]); // fallback to empty array
       } finally {
         setLoading(false);
       }
