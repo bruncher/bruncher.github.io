@@ -15,14 +15,15 @@ function GamingTable() {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
+  // Pagination state
+  const [pageSize, setPageSize] = React.useState(25);
+  const [page, setPage] = React.useState(1);
+
   React.useEffect(() => {
     async function load() {
       try {
-        console.log("Fetching deals...");
         const res = await fetch("https://gaming-api-4ic4.onrender.com/deals");
-        console.log("Response status:", res.status);
         const json = await res.json();
-        console.log("API response:", json);
         setData(json.deals || []);
       } catch (e) {
         console.error("Error fetching deals:", e);
@@ -34,37 +35,117 @@ function GamingTable() {
     load();
   }, []);
 
-  if (loading) return React.createElement("p", { style: { textAlign: "center" } }, "Loading…");
-  if (!data.length) return React.createElement("p", { style: { textAlign: "center" } }, "No deals found.");
+  // Derived pagination values
+  const totalPages = Math.ceil(data.length / pageSize);
+  const start = (page - 1) * pageSize;
+  const visible = data.slice(start, start + pageSize);
+
+  // Reset to page 1 when page size changes
+  React.useEffect(() => {
+    setPage(1);
+  }, [pageSize]);
+
+  if (loading)
+    return React.createElement("p", { style: { textAlign: "center" } }, "Loading…");
+
+  if (!data.length)
+    return React.createElement("p", { style: { textAlign: "center" } }, "No deals found.");
 
   return React.createElement(
     "div",
-    { style: { overflowX: "auto", marginTop: "1rem" } },
+    null,
+
+    // PAGE SIZE SELECTOR
     React.createElement(
-      "table",
-      { style: { width: "100%", borderCollapse: "collapse" } },
+      "div",
+      { style: { marginBottom: "1rem", display: "flex", justifyContent: "flex-end", gap: "0.5rem" } },
+      React.createElement("span", null, "Rows per page:"),
       React.createElement(
-        "thead",
-        null,
-        React.createElement(
-          "tr",
-          null,
-          ["Thumb", "Title", "Store", "Price"].map(th => React.createElement("th", null, th))
+        "select",
+        {
+          value: pageSize,
+          onChange: (e) => setPageSize(Number(e.target.value)),
+        },
+        [10, 25, 50, 100].map((n) =>
+          React.createElement("option", { key: n, value: n }, n)
         )
-      ),
+      )
+    ),
+
+    // TABLE
+    React.createElement(
+      "div",
+      { style: { overflowX: "auto", marginTop: "1rem" } },
       React.createElement(
-        "tbody",
-        null,
-        data.map(item =>
+        "table",
+        { style: { width: "100%", borderCollapse: "collapse" } },
+        React.createElement(
+          "thead",
+          null,
           React.createElement(
             "tr",
-            { key: item.dealID },
-            React.createElement("td", null, React.createElement("img", { src: item.thumb, alt: item.title, style: { height: "50px" } })),
-            React.createElement("td", null, item.title),
-            React.createElement("td", null, item.storeName),
-            React.createElement("td", null, `$${item.salePrice}`)
+            null,
+            ["Thumb", "Title", "Store", "Price"].map((th) =>
+              React.createElement("th", { key: th }, th)
+            )
+          )
+        ),
+        React.createElement(
+          "tbody",
+          null,
+          visible.map((item) =>
+            React.createElement(
+              "tr",
+              { key: item.dealID },
+              React.createElement(
+                "td",
+                null,
+                React.createElement("img", {
+                  src: item.thumb,
+                  alt: item.title,
+                  style: { height: "50px" },
+                })
+              ),
+              React.createElement("td", null, item.title),
+              React.createElement("td", null, item.storeName),
+              React.createElement("td", null, `$${item.salePrice}`)
+            )
           )
         )
+      )
+    ),
+
+    // PAGINATION CONTROLS
+    React.createElement(
+      "div",
+      {
+        style: {
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          gap: "1rem",
+        },
+      },
+      React.createElement(
+        "button",
+        {
+          disabled: page === 1,
+          onClick: () => setPage((p) => Math.max(1, p - 1)),
+        },
+        "Prev"
+      ),
+      React.createElement(
+        "span",
+        null,
+        `Page ${page} of ${totalPages}`
+      ),
+      React.createElement(
+        "button",
+        {
+          disabled: page === totalPages,
+          onClick: () => setPage((p) => Math.min(totalPages, p + 1)),
+        },
+        "Next"
       )
     )
   );
