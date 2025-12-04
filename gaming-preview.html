@@ -19,6 +19,25 @@ function GamingTable() {
   const [pageSize, setPageSize] = React.useState(25);
   const [page, setPage] = React.useState(1);
 
+  // SORTING STATE
+  const [sortConfig, setSortConfig] = React.useState({
+    key: null,
+    direction: "asc",
+  });
+  
+  // Sort handler
+  const handleSort = (columnKey) => {
+    setSortConfig((prev) => {
+      if (prev.key === columnKey) {
+        return {
+          key: columnKey,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      }
+      return { key: columnKey, direction: "asc" };
+    });
+  };
+
   React.useEffect(() => {
     async function load() {
       try {
@@ -35,10 +54,30 @@ function GamingTable() {
     load();
   }, []);
 
-  // Derived pagination values
-  const totalPages = Math.ceil(data.length / pageSize);
+  // SORTED DATA
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return data;
+  
+    return [...data].sort((a, b) => {
+      const x = a[sortConfig.key];
+      const y = b[sortConfig.key];
+  
+      if (x == null || y == null) return 0;
+  
+      if (typeof x === "string") {
+        return sortConfig.direction === "asc"
+          ? x.localeCompare(y)
+          : y.localeCompare(x);
+      }
+  
+      return sortConfig.direction === "asc" ? x - y : y - x;
+    });
+  }, [data, sortConfig]);
+  
+  // PAGINATION (after sorting)
+  const totalPages = Math.ceil(sortedData.length / pageSize);
   const start = (page - 1) * pageSize;
-  const visible = data.slice(start, start + pageSize);
+  const visible = sortedData.slice(start, start + pageSize);
 
   // Reset to page 1 when page size changes
   React.useEffect(() => {
@@ -85,9 +124,14 @@ function GamingTable() {
           React.createElement(
             "tr",
             null,
-            ["Thumb", "Title", "Store", "Price"].map((th) =>
-              React.createElement("th", { key: th }, th)
-            )
+            React.createElement("th", null, "Thumb"),
+            React.createElement("th", { onClick: () => handleSort("title"), style: { cursor: "pointer" } }, "Title"),
+            React.createElement("th", { onClick: () => handleSort("storeName"), style: { cursor: "pointer" } }, "Store"),
+            React.createElement("th", { onClick: () => handleSort("salePrice"), style: { cursor: "pointer" } }, "Price"),
+            React.createElement("th", { onClick: () => handleSort("metacriticScore"), style: { cursor: "pointer" } }, "Metacritic"),
+            React.createElement("th", { onClick: () => handleSort("steamScore"), style: { cursor: "pointer" } }, "Steam"),
+            React.createElement("th", { onClick: () => handleSort("dealScore"), style: { cursor: "pointer" } }, "Deal"),
+            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { cursor: "pointer" } }, "Avg")
           )
         ),
         React.createElement(
@@ -97,6 +141,7 @@ function GamingTable() {
             React.createElement(
               "tr",
               { key: item.dealID },
+            
               React.createElement(
                 "td",
                 null,
@@ -106,9 +151,16 @@ function GamingTable() {
                   style: { height: "50px" },
                 })
               ),
+            
               React.createElement("td", null, item.title),
               React.createElement("td", null, item.storeName),
-              React.createElement("td", null, `$${item.salePrice}`)
+              React.createElement("td", null, `$${item.salePrice}`),
+            
+              // NEW SCORE COLUMNS
+              React.createElement("td", null, item.metacriticScore ?? "-"),
+              React.createElement("td", null, item.steamScore ?? "-"),
+              React.createElement("td", null, item.dealScore ?? "-"),
+              React.createElement("td", null, item.avgScore ?? "-")
             )
           )
         )
