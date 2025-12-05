@@ -64,20 +64,37 @@ function GamingTable() {
   
       if (x == null || y == null) return 0;
   
-      if (typeof x === "string") {
-        return sortConfig.direction === "asc"
-          ? x.localeCompare(y)
-          : y.localeCompare(x);
+      // numeric string?
+      const nx = Number(x);
+      const ny = Number(y);
+      
+      if (!isNaN(nx) && !isNaN(ny)) {
+        return sortConfig.direction === "asc" ? nx - ny : ny - nx;
       }
+      
+      // fallback to string compare
+      return sortConfig.direction === "asc"
+        ? String(x).localeCompare(String(y))
+        : String(y).localeCompare(String(x));
   
-      return sortConfig.direction === "asc" ? x - y : y - x;
     });
   }, [data, sortConfig]);
   
   // PAGINATION (after sorting)
   const totalPages = Math.ceil(sortedData.length / pageSize);
   const start = (page - 1) * pageSize;
-  const visible = sortedData.slice(start, start + pageSize);
+  const visible = sortedData.slice(start, start + pageSize).map(item => {
+    const scores = [
+      Number(item.metacriticScore),
+      Number(item.steamRatingPercent),
+      Number(item.dealRating)
+    ].filter(n => !isNaN(n));
+  
+    return {
+      ...item,
+      avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null
+    };
+  });
 
   // Reset to page 1 when page size changes
   React.useEffect(() => {
@@ -129,9 +146,9 @@ function GamingTable() {
             React.createElement("th", { onClick: () => handleSort("storeName"), style: { cursor: "pointer" } }, "Store"),
             React.createElement("th", { onClick: () => handleSort("salePrice"), style: { cursor: "pointer" } }, "Price"),
             React.createElement("th", { onClick: () => handleSort("metacriticScore"), style: { cursor: "pointer" } }, "Metacritic"),
-            React.createElement("th", { onClick: () => handleSort("steamScore"), style: { cursor: "pointer" } }, "Steam"),
-            React.createElement("th", { onClick: () => handleSort("dealScore"), style: { cursor: "pointer" } }, "Deal"),
-            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { cursor: "pointer" } }, "Avg")
+            React.createElement("th", { onClick: () => handleSort("steamRatingPercent"), style: { cursor: "pointer" } }, "Steam"),
+            React.createElement("th", { onClick: () => handleSort("dealRating"), style: { cursor: "pointer" } }, "Deal"),
+            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { cursor: "pointer" } }, "Avg"),
           )
         ),
         React.createElement(
@@ -156,11 +173,11 @@ function GamingTable() {
               React.createElement("td", null, item.storeName),
               React.createElement("td", null, `$${item.salePrice}`),
             
-              // NEW SCORE COLUMNS
-              React.createElement("td", null, item.metacriticScore ?? "-"),
-              React.createElement("td", null, item.steamScore ?? "-"),
-              React.createElement("td", null, item.dealScore ?? "-"),
-              React.createElement("td", null, item.avgScore ?? "-")
+              // SCORE COLUMNS
+              React.createElement("td", null, item.metacriticScore || "-"),
+              React.createElement("td", null, item.steamRatingPercent || "-"),
+              React.createElement("td", null, item.dealRating || "-"),
+              React.createElement("td", null, item.avgScore != null ? item.avgScore.toFixed(1) : "-"), // stays "-" until you compute it
             )
           )
         )
