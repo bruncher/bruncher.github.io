@@ -25,7 +25,12 @@ function GamingTable() {
     direction: "desc", // highest avg first
   });
 
-  const cellStyle = { padding: "0.5rem 0.75rem", textAlign: "left", borderBottom: "1px solid #ddd" };
+  const cellStyle = { 
+    padding: "0.5rem 0.75rem",
+    textAlign: "left",
+    borderBottom: "1px solid #ddd",
+    verticalAlign: "middle"
+  };
 
   const getSortArrow = (key) => {
     if (sortConfig.key !== key) return null;
@@ -160,15 +165,51 @@ function GamingTable() {
             "tr",
             null,
             React.createElement("th", { style: cellStyle }, "Thumb"),
-            React.createElement("th", { onClick: () => handleSort("title"), style: { ...cellStyle, cursor: "pointer" } }, "Title" + getSortArrow("title")),
-            React.createElement("th", { onClick: () => handleSort("storeName"), style: { ...cellStyle, cursor: "pointer" } }, "Store" + getSortArrow("storeName")),
-            React.createElement("th", { onClick: () => handleSort("salePrice"), style: { ...cellStyle, cursor: "pointer" } }, "Price" + getSortArrow("salePrice")),
-            React.createElement("th", { onClick: () => handleSort("metacriticScore"), style: { ...cellStyle, cursor: "pointer" } }, "Metacritic" + getSortArrow("metacriticScore")),
-            React.createElement("th", { onClick: () => handleSort("steamRatingPercent"), style: { ...cellStyle, cursor: "pointer" } }, "Steam" + getSortArrow("steamRatingPercent")),
-            React.createElement("th", { onClick: () => handleSort("dealRating"), style: { ...cellStyle, cursor: "pointer" } }, "Deal" + getSortArrow("dealRating")),
-            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { ...cellStyle, cursor: "pointer" } }, "Avg" + getSortArrow("avgScore"))
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("title"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Title", getSortArrow("title"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("storeName"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Store", getSortArrow("storeName"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("salePrice"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Price", getSortArrow("salePrice"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("metacriticScore"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Metacritic", getSortArrow("metacriticScore"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("steamRatingPercent"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Steam", getSortArrow("steamRatingPercent"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("dealRating"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Deal", getSortArrow("dealRating"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("avgScore"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Avg", getSortArrow("avgScore"))
+            )
           )
         ),
+        
         React.createElement(
           "tbody",
           null,
@@ -178,12 +219,12 @@ function GamingTable() {
               { key: item.dealID },
               React.createElement(
                 "td",
-                null,
+                { style: cellStyle },
                 React.createElement("img", { src: item.thumb, alt: item.title, style: { height: "50px" } })
               ),
-              React.createElement("td", null, item.title),
-              React.createElement("td", null, item.storeName),
-              React.createElement("td", null, `$${item.salePrice}`),
+              React.createElement("td", { style: cellStyle }, item.title),
+              React.createElement("td", { style: cellStyle }, item.storeName),
+              React.createElement("td", { style: cellStyle }, `$${item.salePrice != null ? item.salePrice : "-"}`),
               React.createElement("td", { style: cellStyle }, item.metacriticScore || "-"),
               React.createElement("td", { style: cellStyle }, item.steamRatingPercent || "-"),
               React.createElement("td", { style: cellStyle }, item.dealRating || "-"),
