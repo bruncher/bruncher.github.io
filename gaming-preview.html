@@ -68,15 +68,24 @@ function GamingTable() {
 
   // After fetching data and setting it
   const processedData = data.map(item => {
-    const scores = [
-      Number(item.metacriticScore),
-      Number(item.steamRatingPercent),
-      item.dealRating != null ? Number(item.dealRating) * 10 : null
-    ].filter(n => !isNaN(n));
+    const scores = [];
+  
+    if (!isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0) {
+      scores.push(Number(item.metacriticScore));
+    }
+  
+    if (!isNaN(Number(item.steamRatingPercent)) && Number(item.steamRatingPercent) > 0) {
+      scores.push(Number(item.steamRatingPercent));
+    }
+  
+    if (item.dealRating != null) {
+      scores.push(Number(item.dealRating) * 10);
+    }
   
     return {
       ...item,
-      avgScore: scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null
+      avgScore: scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null,
+      metacriticScore: scores.includes(Number(item.metacriticScore)) ? Number(item.metacriticScore) : null
     };
   });
   
