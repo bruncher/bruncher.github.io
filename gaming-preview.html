@@ -54,47 +54,57 @@ function GamingTable() {
     load();
   }, []);
 
-  // SORTED DATA
-  const sortedData = React.useMemo(() => {
-    if (!sortConfig.key) return data;
-  
-    return [...data].sort((a, b) => {
-      const x = a[sortConfig.key];
-      const y = b[sortConfig.key];
-  
-      if (x == null || y == null) return 0;
-  
-      // numeric string?
-      const nx = Number(x);
-      const ny = Number(y);
-      
-      if (!isNaN(nx) && !isNaN(ny)) {
-        return sortConfig.direction === "asc" ? nx - ny : ny - nx;
-      }
-      
-      // fallback to string compare
-      return sortConfig.direction === "asc"
-        ? String(x).localeCompare(String(y))
-        : String(y).localeCompare(String(x));
-  
-    });
-  }, [data, sortConfig]);
-  
-  // PAGINATION (after sorting)
-  const totalPages = Math.ceil(sortedData.length / pageSize);
-  const start = (page - 1) * pageSize;
-  const visible = sortedData.slice(start, start + pageSize).map(item => {
+  // After fetching data and setting it
+  const processedData = data.map(item => {
     const scores = [
       Number(item.metacriticScore),
       Number(item.steamRatingPercent),
-      Number(item.dealRating)
+      item.dealRating != null ? Number(item.dealRating) * 10 : null
     ].filter(n => !isNaN(n));
   
     return {
       ...item,
-      avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null
+      avgScore: scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null
     };
   });
+  
+  // SORTED DATA
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return processedData;
+  
+    return [...processedData].sort((a, b) => {
+      let x = a[sortConfig.key];
+      let y = b[sortConfig.key];
+  
+      // Ensure numeric comparison for avgScore
+      if (sortConfig.key === "avgScore") {
+        x = x != null ? Number(x) : -Infinity;
+        y = y != null ? Number(y) : -Infinity;
+      }
+  
+      // Ensure numeric comparison for salePrice
+      if (sortConfig.key === "salePrice") {
+        x = Number(String(x).replace(/[^0-9.]/g, ""));
+        y = Number(String(y).replace(/[^0-9.]/g, ""));
+      }
+  
+      const nx = Number(x);
+      const ny = Number(y);
+  
+      if (!isNaN(nx) && !isNaN(ny)) {
+        return sortConfig.direction === "asc" ? nx - ny : ny - nx;
+      }
+  
+      return sortConfig.direction === "asc"
+        ? String(x).localeCompare(String(y))
+        : String(y).localeCompare(String(x));
+    });
+  }, [processedData, sortConfig]);
+  
+  // PAGINATION (after sorting)
+  const totalPages = Math.ceil(sortedData.length / pageSize);
+  const start = (page - 1) * pageSize;
+  const visible = sortedData.slice(start, start + pageSize);
 
   // Reset to page 1 when page size changes
   React.useEffect(() => {
@@ -177,7 +187,7 @@ function GamingTable() {
               React.createElement("td", null, item.metacriticScore || "-"),
               React.createElement("td", null, item.steamRatingPercent || "-"),
               React.createElement("td", null, item.dealRating || "-"),
-              React.createElement("td", null, item.avgScore != null ? item.avgScore.toFixed(1) : "-"), // stays "-" until you compute it
+              React.createElement("td", null, item.avgScore != null ? item.avgScore.toFixed(1) : "-")
             )
           )
         )
