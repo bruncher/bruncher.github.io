@@ -21,9 +21,16 @@ function GamingTable() {
 
   // SORTING STATE
   const [sortConfig, setSortConfig] = React.useState({
-    key: null,
-    direction: "asc",
+    key: "avgScore",
+    direction: "desc", // highest avg first
   });
+
+  const cellStyle = { padding: "0.5rem 0.75rem", textAlign: "left", borderBottom: "1px solid #ddd" };
+
+  const getSortArrow = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "asc" ? " ▲" : " ▼";
+  };
   
   // Sort handler
   const handleSort = (columnKey) => {
@@ -116,11 +123,11 @@ function GamingTable() {
 
   if (!data.length)
     return React.createElement("p", { style: { textAlign: "center" } }, "No deals found.");
-
+  
   return React.createElement(
     "div",
     null,
-
+  
     // PAGE SIZE SELECTOR
     React.createElement(
       "div",
@@ -137,7 +144,7 @@ function GamingTable() {
         )
       )
     ),
-
+  
     // TABLE
     React.createElement(
       "div",
@@ -145,20 +152,21 @@ function GamingTable() {
       React.createElement(
         "table",
         { style: { width: "100%", borderCollapse: "collapse" } },
+        // <-- THE COMMA IS HERE, after thead
         React.createElement(
           "thead",
           null,
           React.createElement(
             "tr",
             null,
-            React.createElement("th", null, "Thumb"),
-            React.createElement("th", { onClick: () => handleSort("title"), style: { cursor: "pointer" } }, "Title"),
-            React.createElement("th", { onClick: () => handleSort("storeName"), style: { cursor: "pointer" } }, "Store"),
-            React.createElement("th", { onClick: () => handleSort("salePrice"), style: { cursor: "pointer" } }, "Price"),
-            React.createElement("th", { onClick: () => handleSort("metacriticScore"), style: { cursor: "pointer" } }, "Metacritic"),
-            React.createElement("th", { onClick: () => handleSort("steamRatingPercent"), style: { cursor: "pointer" } }, "Steam"),
-            React.createElement("th", { onClick: () => handleSort("dealRating"), style: { cursor: "pointer" } }, "Deal"),
-            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { cursor: "pointer" } }, "Avg"),
+            React.createElement("th", { style: cellStyle }, "Thumb"),
+            React.createElement("th", { onClick: () => handleSort("title"), style: { ...cellStyle, cursor: "pointer" } }, "Title" + getSortArrow("title")),
+            React.createElement("th", { onClick: () => handleSort("storeName"), style: { ...cellStyle, cursor: "pointer" } }, "Store" + getSortArrow("storeName")),
+            React.createElement("th", { onClick: () => handleSort("salePrice"), style: { ...cellStyle, cursor: "pointer" } }, "Price" + getSortArrow("salePrice")),
+            React.createElement("th", { onClick: () => handleSort("metacriticScore"), style: { ...cellStyle, cursor: "pointer" } }, "Metacritic" + getSortArrow("metacriticScore")),
+            React.createElement("th", { onClick: () => handleSort("steamRatingPercent"), style: { ...cellStyle, cursor: "pointer" } }, "Steam" + getSortArrow("steamRatingPercent")),
+            React.createElement("th", { onClick: () => handleSort("dealRating"), style: { ...cellStyle, cursor: "pointer" } }, "Deal" + getSortArrow("dealRating")),
+            React.createElement("th", { onClick: () => handleSort("avgScore"), style: { ...cellStyle, cursor: "pointer" } }, "Avg" + getSortArrow("avgScore"))
           )
         ),
         React.createElement(
@@ -168,62 +176,37 @@ function GamingTable() {
             React.createElement(
               "tr",
               { key: item.dealID },
-            
               React.createElement(
                 "td",
                 null,
-                React.createElement("img", {
-                  src: item.thumb,
-                  alt: item.title,
-                  style: { height: "50px" },
-                })
+                React.createElement("img", { src: item.thumb, alt: item.title, style: { height: "50px" } })
               ),
-            
               React.createElement("td", null, item.title),
               React.createElement("td", null, item.storeName),
               React.createElement("td", null, `$${item.salePrice}`),
-            
-              // SCORE COLUMNS
-              React.createElement("td", null, item.metacriticScore || "-"),
-              React.createElement("td", null, item.steamRatingPercent || "-"),
-              React.createElement("td", null, item.dealRating || "-"),
-              React.createElement("td", null, item.avgScore != null ? item.avgScore.toFixed(1) : "-")
+              React.createElement("td", { style: cellStyle }, item.metacriticScore || "-"),
+              React.createElement("td", { style: cellStyle }, item.steamRatingPercent || "-"),
+              React.createElement("td", { style: cellStyle }, item.dealRating || "-"),
+              React.createElement("td", { style: cellStyle }, item.avgScore != null ? item.avgScore.toFixed(1) : "-")
             )
           )
         )
       )
     ),
-
+  
     // PAGINATION CONTROLS
     React.createElement(
       "div",
-      {
-        style: {
-          marginTop: "1rem",
-          display: "flex",
-          justifyContent: "center",
-          gap: "1rem",
-        },
-      },
+      { style: { marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" } },
       React.createElement(
         "button",
-        {
-          disabled: page === 1,
-          onClick: () => setPage((p) => Math.max(1, p - 1)),
-        },
+        { disabled: page === 1, onClick: () => setPage((p) => Math.max(1, p - 1)) },
         "Prev"
       ),
-      React.createElement(
-        "span",
-        null,
-        `Page ${page} of ${totalPages}`
-      ),
+      React.createElement("span", null, `Page ${page} of ${totalPages}`),
       React.createElement(
         "button",
-        {
-          disabled: page === totalPages,
-          onClick: () => setPage((p) => Math.min(totalPages, p + 1)),
-        },
+        { disabled: page === totalPages, onClick: () => setPage((p) => Math.min(totalPages, p + 1)) },
         "Next"
       )
     )
