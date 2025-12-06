@@ -10,4 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Render service
-        run: curl -s https://gaming-api-4ic4.onrender.com/ping || true
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://gaming-api-4ic4.onrender.com/ping || echo "000")
+          echo "Render ping returned status: $STATUS"
