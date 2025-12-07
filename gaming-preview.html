@@ -66,6 +66,18 @@ function GamingTable() {
     load();
   }, []);
 
+  const STORE_NAMES = {
+    steam: "Steam",
+    humble: "Humble",
+    fanatical: "Fanatical",
+    gog: "GOG",
+    epic: "Epic Games Store",
+    epicgames: "Epic Games Store",
+    origin: "Origin",
+    uplay: "Ubisoft Connect",
+    itch: "Itch.io",
+  };
+
   // After fetching data and setting it
   const processedData = data.map(item => {
     const scores = [];
@@ -84,6 +96,7 @@ function GamingTable() {
   
     return {
       ...item,
+      storeName: STORE_NAMES[item.storeName?.toLowerCase()] ?? item.storeName,
       avgScore: scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null,
       metacriticScore: scores.includes(Number(item.metacriticScore)) ? Number(item.metacriticScore) : null
     };
