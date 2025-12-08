@@ -95,7 +95,12 @@ function GamingTable() {
     return {
       ...item,
       storeName: STORE_NAMES[normalizeStoreName(item.storeName)] ?? item.storeName,
-      avgScore: scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null,
+  
+      // ⭐ NEW FIELDS
+      year: item.steamMeta?.year ? Number(item.steamMeta.year) : null,
+      genres: Array.isArray(item.steamMeta?.genres) ? item.steamMeta.genres : [],
+  
+      avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
       metacriticScore: scores.includes(Number(item.metacriticScore)) ? Number(item.metacriticScore) : null
     };
   });
@@ -185,7 +190,7 @@ function GamingTable() {
             "tr",
             null,
             React.createElement("th", { style: cellStyle }, "Thumb"),
-        
+     
             React.createElement(
               "th",
               { onClick: () => handleSort("title"), style: { ...cellStyle, cursor: "pointer" } },
@@ -196,6 +201,18 @@ function GamingTable() {
               "th",
               { onClick: () => handleSort("storeName"), style: { ...cellStyle, cursor: "pointer" } },
               React.createElement("span", null, "Store", getSortArrow("storeName"))
+            ),
+
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("genres"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Genres")
+            ),
+            
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("year"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Year", getSortArrow("year"))
             ),
         
             React.createElement(
@@ -244,6 +261,19 @@ function GamingTable() {
               ),
               React.createElement("td", { style: cellStyle }, item.title),
               React.createElement("td", { style: cellStyle }, item.storeName),
+              // GENRES
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                item.genres?.length ? item.genres.slice(0, 3).join(", ") : "-"
+              ),
+              
+              // YEAR
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                item.year || "-"
+              ),
               React.createElement("td", { style: cellStyle }, `$${item.salePrice != null ? item.salePrice : "-"}`),
               React.createElement("td", { style: cellStyle }, item.metacriticScore || "-"),
               React.createElement("td", { style: cellStyle }, item.steamRatingPercent || "-"),
