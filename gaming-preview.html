@@ -76,6 +76,11 @@ function GamingTable() {
     return String(name).replace(/[^a-zA-Z0-9 ]/g, "").trim();
   }
 
+  function forceHttps(url) {
+    if (!url) return url;
+    return url.replace(/^http:\/\//i, "https://");
+  }
+
   // After fetching data and setting it
   const processedData = data.map(item => {
     const scores = [];
@@ -260,7 +265,7 @@ function GamingTable() {
                 { style: cellStyle },
                 React.createElement(
                   "a",
-                  { href: `https://www.cheapshark.com/redirect?dealID=${item.dealID}`, target: "_blank", rel: "noopener noreferrer" },
+                  { href: forceHttps(`https://www.cheapshark.com/redirect?dealID=${item.dealID}`), target: "_blank", rel: "noopener noreferrer" },
                   React.createElement("img", {
                     src: item.thumb,
                     alt: item.title,
@@ -276,7 +281,7 @@ function GamingTable() {
                 React.createElement(
                   "a",
                   {
-                    href: `https://www.cheapshark.com/redirect?dealID=${item.dealID}`,
+                    href: forceHttps(`https://www.cheapshark.com/redirect?dealID=${item.dealID}`),
                     target: "_blank",
                     rel: "noopener noreferrer",
                     style: { color: "inherit", textDecoration: "underline" }
