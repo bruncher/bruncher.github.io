@@ -254,12 +254,36 @@ function GamingTable() {
             React.createElement(
               "tr",
               { key: item.dealID },
+              // THUMB (clickable)
               React.createElement(
                 "td",
                 { style: cellStyle },
-                React.createElement("img", { src: item.thumb, alt: item.title, style: { height: "50px" } })
+                React.createElement(
+                  "a",
+                  { href: `https://www.cheapshark.com/redirect?dealID=${item.dealID}`, target: "_blank", rel: "noopener noreferrer" },
+                  React.createElement("img", {
+                    src: item.thumb,
+                    alt: item.title,
+                    style: { height: "50px", cursor: "pointer" }
+                  })
+                )
               ),
-              React.createElement("td", { style: cellStyle }, item.title),
+              
+              // TITLE (clickable)
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                React.createElement(
+                  "a",
+                  {
+                    href: `https://www.cheapshark.com/redirect?dealID=${item.dealID}`,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    style: { color: "inherit", textDecoration: "underline" }
+                  },
+                  item.title
+                )
+              ),
               React.createElement("td", { style: cellStyle }, item.storeName),
               // GENRES
               React.createElement(
