@@ -25,6 +25,8 @@ function GamingTable() {
     direction: "desc", // highest avg first
   });
 
+  const [selectedGenres, setSelectedGenres] = React.useState([]);
+
   const cellStyle = { 
     padding: "0.5rem 0.75rem",
     textAlign: "left",
@@ -109,22 +111,37 @@ function GamingTable() {
       metacriticScore: scores.includes(Number(item.metacriticScore)) ? Number(item.metacriticScore) : null
     };
   });
+
+  const allGenres = React.useMemo(() => {
+    const set = new Set();
+    processedData.forEach(item => {
+      item.genres?.forEach(g => set.add(g));
+    });
+    return Array.from(set).sort();
+  }, [processedData]);
   
-  // SORTED DATA
+  // FILTERED DATA
+  const filteredData = React.useMemo(() => {
+    if (selectedGenres.length === 0) return processedData;
+  
+    return processedData.filter(item =>
+      item.genres?.some(g => selectedGenres.includes(g))
+    );
+  }, [processedData, selectedGenres]);
+  
+  // SORTED DATA (sort AFTER filtering)
   const sortedData = React.useMemo(() => {
-    if (!sortConfig.key) return processedData;
+    if (!sortConfig.key) return filteredData;
   
-    return [...processedData].sort((a, b) => {
+    return [...filteredData].sort((a, b) => {
       let x = a[sortConfig.key];
       let y = b[sortConfig.key];
   
-      // Ensure numeric comparison for avgScore
       if (sortConfig.key === "avgScore") {
         x = x != null ? Number(x) : -Infinity;
         y = y != null ? Number(y) : -Infinity;
       }
   
-      // Ensure numeric comparison for salePrice
       if (sortConfig.key === "salePrice") {
         x = Number(String(x).replace(/[^0-9.]/g, ""));
         y = Number(String(y).replace(/[^0-9.]/g, ""));
@@ -141,7 +158,7 @@ function GamingTable() {
         ? String(x).localeCompare(String(y))
         : String(y).localeCompare(String(x));
     });
-  }, [processedData, sortConfig]);
+  }, [filteredData, sortConfig]);
   
   // PAGINATION (after sorting)
   const totalPages = Math.ceil(sortedData.length / pageSize);
@@ -179,6 +196,35 @@ function GamingTable() {
         )
       )
     ),
+
+    // GENRE FILTER UI
+    React.createElement(
+      "div",
+      { style: { marginBottom: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" } },
+      React.createElement("strong", null, "Filter by Genre:"),
+      React.createElement(
+        "select",
+        {
+          multiple: true,
+          size: 5,
+          value: selectedGenres,
+          onChange: (e) => {
+            const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            setSelectedGenres(selected);
+          },
+          style: { padding: "0.5rem", minWidth: "200px" }
+        },
+        allGenres.map(g =>
+          React.createElement("option", { key: g, value: g }, g)
+        )
+      ),
+      selectedGenres.length > 0 &&
+        React.createElement(
+          "button",
+          { onClick: () => setSelectedGenres([]) },
+          "Clear"
+        )
+    ),
   
     // TABLE
     React.createElement(
@@ -187,7 +233,6 @@ function GamingTable() {
       React.createElement(
         "table",
         { style: { width: "100%", borderCollapse: "collapse" } },
-        // <-- THE COMMA IS HERE, after thead
         React.createElement(
           "thead",
           null,
@@ -210,7 +255,7 @@ function GamingTable() {
 
             React.createElement(
               "th",
-              { onClick: () => handleSort("genres"), style: { ...cellStyle, cursor: "pointer" } },
+              //{ onClick: () => handleSort("genres"), style: { ...cellStyle, cursor: "pointer" } },
               React.createElement("span", null, "Genres")
             ),
             
@@ -303,7 +348,7 @@ function GamingTable() {
                 { style: cellStyle },
                 item.year || "-"
               ),
-              React.createElement("td", { style: cellStyle }, `$${item.salePrice != null ? item.salePrice : "-"}`),
+              React.createElement("td", { style: cellStyle }, `$${item.salePrice != null ? Number(item.salePrice).toFixed(2) : "-"}`),
               React.createElement("td", { style: cellStyle }, item.metacriticScore || "-"),
               React.createElement("td", { style: cellStyle }, item.steamRatingPercent || "-"),
               React.createElement("td", { style: cellStyle }, item.dealRating || "-"),
