@@ -27,6 +27,9 @@ function GamingTable() {
 
   const [selectedGenres, setSelectedGenres] = React.useState([]);
 
+  const [minYear, setMinYear] = React.useState("");
+  const [maxYear, setMaxYear] = React.useState("");
+
   const cellStyle = { 
     padding: "0.5rem 0.75rem",
     textAlign: "left",
@@ -75,7 +78,10 @@ function GamingTable() {
   };
 
   function normalizeStoreName(name) {
-    return String(name).replace(/[^a-zA-Z0-9 ]/g, "").trim();
+    return String(name)
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, "")
+      .trim();
   }
 
   function forceHttps(url) {
@@ -84,33 +90,32 @@ function GamingTable() {
   }
 
   // After fetching data and setting it
-  const processedData = data.map(item => {
-    const scores = [];
+  const processedData = React.useMemo(() => {
+    return data.map(item => {
+      const scores = [];
   
-    if (!isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0) {
-      scores.push(Number(item.metacriticScore));
-    }
+      if (!isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0)
+        scores.push(Number(item.metacriticScore));
   
-    if (!isNaN(Number(item.steamRatingPercent)) && Number(item.steamRatingPercent) > 0) {
-      scores.push(Number(item.steamRatingPercent));
-    }
+      if (!isNaN(Number(item.steamRatingPercent)) && Number(item.steamRatingPercent) > 0)
+        scores.push(Number(item.steamRatingPercent));
   
-    if (item.dealRating != null) {
-      scores.push(Number(item.dealRating) * 10);
-    }
+      if (item.dealRating != null)
+        scores.push(Number(item.dealRating) * 10);
   
-    return {
-      ...item,
-      storeName: STORE_NAMES[normalizeStoreName(item.storeName)] ?? item.storeName,
-  
-      // ⭐ NEW FIELDS
-      year: item.steamMeta?.year ? Number(item.steamMeta.year) : null,
-      genres: Array.isArray(item.steamMeta?.genres) ? item.steamMeta.genres : [],
-  
-      avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
-      metacriticScore: scores.includes(Number(item.metacriticScore)) ? Number(item.metacriticScore) : null
-    };
-  });
+      return {
+        ...item,
+        storeName: STORE_NAMES[normalizeStoreName(item.storeName)] ?? item.storeName,
+        year: item.steamMeta?.year ? Number(item.steamMeta.year) : null,
+        genres: Array.isArray(item.steamMeta?.genres) ? item.steamMeta.genres : [],
+        avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
+        metacriticScore:
+          !isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0
+            ? Number(item.metacriticScore)
+            : null,
+      };
+    });
+  }, [data]);
 
   const allGenres = React.useMemo(() => {
     const set = new Set();
@@ -119,15 +124,31 @@ function GamingTable() {
     });
     return Array.from(set).sort();
   }, [processedData]);
+
+  const allYears = React.useMemo(() => {
+    const years = processedData
+      .map(item => item.year)
+      .filter(y => y != null);
+    return Array.from(new Set(years)).sort((a, b) => a - b);
+  }, [processedData]);
   
-  // FILTERED DATA
+  // FILTERED DATA (genres + year range)
   const filteredData = React.useMemo(() => {
-    if (selectedGenres.length === 0) return processedData;
+    return processedData.filter(item => {
+      // Genre filter
+      const passesGenre =
+        selectedGenres.length === 0 ||
+        item.genres?.some(g => selectedGenres.includes(g));
   
-    return processedData.filter(item =>
-      item.genres?.some(g => selectedGenres.includes(g))
-    );
-  }, [processedData, selectedGenres]);
+      // Year filter
+      const y = item.year;
+      const passesYear =
+        (!minYear || (y != null && y >= Number(minYear))) &&
+        (!maxYear || (y != null && y <= Number(maxYear)));
+  
+      return passesGenre && passesYear;
+    });
+  }, [processedData, selectedGenres, minYear, maxYear]);
   
   // SORTED DATA (sort AFTER filtering)
   const sortedData = React.useMemo(() => {
@@ -136,24 +157,26 @@ function GamingTable() {
     return [...filteredData].sort((a, b) => {
       let x = a[sortConfig.key];
       let y = b[sortConfig.key];
-  
-      if (sortConfig.key === "avgScore") {
+    
+      // Numeric sorts
+      if (sortConfig.key === "year" || sortConfig.key === "avgScore") {
         x = x != null ? Number(x) : -Infinity;
         y = y != null ? Number(y) : -Infinity;
       }
-  
+    
       if (sortConfig.key === "salePrice") {
-        x = Number(String(x).replace(/[^0-9.]/g, ""));
-        y = Number(String(y).replace(/[^0-9.]/g, ""));
+        x = x != null ? Number(x) : Infinity; // missing salePrice goes to bottom
+        y = y != null ? Number(y) : Infinity;
       }
-  
+    
       const nx = Number(x);
       const ny = Number(y);
-  
+    
       if (!isNaN(nx) && !isNaN(ny)) {
         return sortConfig.direction === "asc" ? nx - ny : ny - nx;
       }
-  
+    
+      // Fallback to alphabetical
       return sortConfig.direction === "asc"
         ? String(x).localeCompare(String(y))
         : String(y).localeCompare(String(x));
@@ -222,6 +245,57 @@ function GamingTable() {
         React.createElement(
           "button",
           { onClick: () => setSelectedGenres([]) },
+          "Clear"
+        )
+    ),
+
+    // YEAR RANGE FILTER UI
+    React.createElement(
+      "div",
+      { style: { marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" } },
+    
+      React.createElement("strong", null, "Year Range:"),
+    
+      // Min year
+      React.createElement(
+        "select",
+        {
+          value: minYear,
+          onChange: (e) => setMinYear(e.target.value),
+          style: { padding: "0.5rem" }
+        },
+        [
+          React.createElement("option", { key: "any", value: "" }, "Min")
+        ].concat(
+          allYears.map(y =>
+            React.createElement("option", { key: y, value: y }, y)
+          )
+        )
+      ),
+    
+      React.createElement("span", null, "to"),
+    
+      // Max year
+      React.createElement(
+        "select",
+        {
+          value: maxYear,
+          onChange: (e) => setMaxYear(e.target.value),
+          style: { padding: "0.5rem" }
+        },
+        [
+          React.createElement("option", { key: "any2", value: "" }, "Max")
+        ].concat(
+          allYears.map(y =>
+            React.createElement("option", { key: y, value: y }, y)
+          )
+        )
+      ),
+    
+      (minYear || maxYear) &&
+        React.createElement(
+          "button",
+          { onClick: () => { setMinYear(""); setMaxYear(""); } },
           "Clear"
         )
     ),
