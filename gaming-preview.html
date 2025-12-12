@@ -203,103 +203,88 @@ function GamingTable() {
     "div",
     null,
   
-    // PAGE SIZE SELECTOR
     React.createElement(
       "div",
-      { style: { marginBottom: "1rem", display: "flex", justifyContent: "flex-end", gap: "0.5rem" } },
-      React.createElement("span", null, "Rows per page:"),
+      {
+        style: {
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between", // push rows-per-page to the right
+          gap: "1rem",
+          marginBottom: "1rem",
+          alignItems: "flex-start"
+        }
+      },
+    
+      // LEFT: Filters container
       React.createElement(
-        "select",
-        {
-          value: pageSize,
-          onChange: (e) => setPageSize(Number(e.target.value)),
-        },
-        [10, 25, 50, 100].map((n) =>
-          React.createElement("option", { key: n, value: n }, n)
+        "div",
+        { style: { display: "flex", gap: "1rem", flexWrap: "wrap" } },
+    
+        // Genre filter
+        React.createElement(
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+          React.createElement("strong", null, "Genre:"),
+          React.createElement(
+            "select",
+            {
+              multiple: true,
+              size: 5,
+              value: selectedGenres,
+              onChange: (e) => setSelectedGenres(Array.from(e.target.selectedOptions).map(opt => opt.value)),
+              style: { minWidth: "150px", padding: "0.5rem" }
+            },
+            allGenres.map(g => React.createElement("option", { key: g, value: g }, g))
+          ),
+          selectedGenres.length > 0 && React.createElement("button", { onClick: () => setSelectedGenres([]) }, "Clear")
+        ),
+    
+        // Year filter
+        React.createElement(
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+          React.createElement("strong", null, "Year:"),
+          React.createElement(
+            "div",
+            { style: { display: "flex", alignItems: "center", gap: "0.25rem" } },
+            React.createElement(
+              "select",
+              { value: minYear, onChange: (e) => setMinYear(e.target.value), style: { padding: "0.5rem" } },
+              [React.createElement("option", { key: "any", value: "" }, "Min")].concat(
+                allYears.map(y => React.createElement("option", { key: y, value: y }, y))
+              )
+            ),
+            React.createElement("span", null, "to"),
+            React.createElement(
+              "select",
+              { value: maxYear, onChange: (e) => setMaxYear(e.target.value), style: { padding: "0.5rem" } },
+              [React.createElement("option", { key: "any2", value: "" }, "Max")].concat(
+                allYears.map(y => React.createElement("option", { key: y, value: y }, y))
+              )
+            ),
+            (minYear || maxYear) && React.createElement(
+              "button",
+              { onClick: () => { setMinYear(""); setMaxYear(""); } },
+              "Clear"
+            )
+          )
+        )
+      ),
+    
+      // RIGHT: Rows per page
+      React.createElement(
+        "div",
+        { style: { display: "flex", alignItems: "center", gap: "0.5rem" } },
+        React.createElement("span", null, "Rows per page:"),
+        React.createElement(
+          "select",
+          { value: pageSize, onChange: (e) => setPageSize(Number(e.target.value)) },
+          [10, 25, 50, 100].map(n => React.createElement("option", { key: n, value: n }, n))
         )
       )
-    ),
-
-    // GENRE FILTER UI
-    React.createElement(
-      "div",
-      { style: { marginBottom: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" } },
-      React.createElement("strong", null, "Filter by Genre:"),
-      React.createElement(
-        "select",
-        {
-          multiple: true,
-          size: 5,
-          value: selectedGenres,
-          onChange: (e) => {
-            const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
-            setSelectedGenres(selected);
-          },
-          style: { padding: "0.5rem", minWidth: "200px" }
-        },
-        allGenres.map(g =>
-          React.createElement("option", { key: g, value: g }, g)
-        )
-      ),
-      selectedGenres.length > 0 &&
-        React.createElement(
-          "button",
-          { onClick: () => setSelectedGenres([]) },
-          "Clear"
-        )
-    ),
-
-    // YEAR RANGE FILTER UI
-    React.createElement(
-      "div",
-      { style: { marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" } },
+    ),  
     
-      React.createElement("strong", null, "Year Range:"),
-    
-      // Min year
-      React.createElement(
-        "select",
-        {
-          value: minYear,
-          onChange: (e) => setMinYear(e.target.value),
-          style: { padding: "0.5rem" }
-        },
-        [
-          React.createElement("option", { key: "any", value: "" }, "Min")
-        ].concat(
-          allYears.map(y =>
-            React.createElement("option", { key: y, value: y }, y)
-          )
-        )
-      ),
-    
-      React.createElement("span", null, "to"),
-    
-      // Max year
-      React.createElement(
-        "select",
-        {
-          value: maxYear,
-          onChange: (e) => setMaxYear(e.target.value),
-          style: { padding: "0.5rem" }
-        },
-        [
-          React.createElement("option", { key: "any2", value: "" }, "Max")
-        ].concat(
-          allYears.map(y =>
-            React.createElement("option", { key: y, value: y }, y)
-          )
-        )
-      ),
-    
-      (minYear || maxYear) &&
-        React.createElement(
-          "button",
-          { onClick: () => { setMinYear(""); setMaxYear(""); } },
-          "Clear"
-        )
-    ),
-  
     // TABLE
     React.createElement(
       "div",
