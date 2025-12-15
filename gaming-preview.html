@@ -327,15 +327,17 @@ function GamingTable() {
           )
         ),
     
-        // Clear Filters button
+        // Clear Filters column (invisible title)
         React.createElement(
-          "button",
-          { 
-            onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); },
-            style: { padding: "0.5rem 1rem", cursor: "pointer", alignSelf: "flex-end" }
-          },
-          "Clear Filters"
-        )
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+          React.createElement("strong", { style: { visibility: "hidden" } }, "Clear Filters"),
+          React.createElement(
+            "button",
+            { onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); }, style: { padding: "0.5rem 1rem", cursor: "pointer" } },
+            "Clear Filters"
+          )
+        ),
       ),
     
       // RIGHT SIDE: Rows per page
