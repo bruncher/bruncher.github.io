@@ -73,6 +73,18 @@ function GamingTable() {
     load();
   }, []);
 
+  const genreRef = React.useRef();
+
+  React.useEffect(() => {
+    function handleClickOutside(event) {
+      if (genreRef.current && !genreRef.current.contains(event.target)) {
+        setGenreDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const STORE_NAMES = {
     "steam": "Steam",
     "humble store": "Humble Store",
@@ -140,7 +152,7 @@ function GamingTable() {
       // Genre filter
       const passesGenre =
         selectedGenres.length === 0 ||
-        item.genres?.some(g => selectedGenres.includes(g));
+        selectedGenres.every(g => item.genres?.includes(g));
   
       // Year filter
       const y = item.year;
@@ -227,7 +239,10 @@ function GamingTable() {
       // Genre filter as dropdown with checkboxes
       React.createElement(
         "div",
-        { style: { display: "flex", flexDirection: "column", gap: "0.25rem", position: "relative" } },
+        { 
+          style: { display: "flex", flexDirection: "column", gap: "0.25rem", position: "relative" },
+          ref: genreRef
+        },
         React.createElement("strong", null, "Genre:"),
         React.createElement(
           "div",
@@ -317,7 +332,7 @@ function GamingTable() {
           "button",
           { 
             onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); },
-            style: { padding: "0.5rem 1rem", cursor: "pointer" }
+            style: { padding: "0.5rem 1rem", cursor: "pointer", alignSelf: "flex-end" }
           },
           "Clear Filters"
         )
