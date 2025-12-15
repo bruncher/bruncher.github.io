@@ -30,6 +30,8 @@ function GamingTable() {
   const [minYear, setMinYear] = React.useState("");
   const [maxYear, setMaxYear] = React.useState("");
 
+  const [genreDropdownOpen, setGenreDropdownOpen] = React.useState(false);
+
   const cellStyle = { 
     padding: "0.5rem 0.75rem",
     textAlign: "left",
@@ -203,40 +205,88 @@ function GamingTable() {
     "div",
     null,
   
-    // Filters and rows per page select
+    // Filters + control
     React.createElement(
       "div",
       {
         style: {
           display: "flex",
-          justifyContent: "space-between",
           flexWrap: "wrap",
           gap: "1rem",
           marginBottom: "1rem",
-          alignItems: "flex-start",
+          alignItems: "center",
+          justifyContent: "space-between" // pushes page size to the right
         }
       },
     
-      // LEFT: Filters
+      // LEFT SIDE: Genre, Year, Clear
       React.createElement(
         "div",
-        { style: { display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "flex-start" } },
-        
-        // Genre filter
+        { style: { display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" } },
+    
+      // Genre filter as dropdown with checkboxes
+      React.createElement(
+        "div",
+        { style: { display: "flex", flexDirection: "column", gap: "0.25rem", position: "relative" } },
+        React.createElement("strong", null, "Genre:"),
         React.createElement(
           "div",
-          { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
-          React.createElement("strong", null, "Genre:"),
-          React.createElement(
-            "select",
-            {
-              multiple: true,
-              size: 5,
-              value: selectedGenres,
-              onChange: (e) => setSelectedGenres(Array.from(e.target.selectedOptions).map(opt => opt.value)),
-              style: { minWidth: "150px", padding: "0.5rem" }
+          {
+            style: {
+              padding: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              minWidth: "150px",
+              maxWidth: "200px",
+              cursor: "pointer",
+              userSelect: "none",
             },
-            allGenres.map(g => React.createElement("option", { key: g, value: g }, g))
+            onClick: () => setGenreDropdownOpen((open) => !open),
+          },
+          selectedGenres.length === 0
+            ? "Select genres..."
+            : selectedGenres.length <= 3
+            ? selectedGenres.join(", ")
+            : `${selectedGenres.length} selected`
+        ),
+        genreDropdownOpen &&
+          React.createElement(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                maxHeight: "200px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                background: "#fff",
+                zIndex: 10,
+                padding: "0.5rem",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
+              }
+            },
+            allGenres.map((g) =>
+              React.createElement(
+                "label",
+                {
+                  key: g,
+                  style: { display: "flex", alignItems: "center", gap: "0.25rem", cursor: "pointer" }
+                },
+                React.createElement("input", {
+                  type: "checkbox",
+                  checked: selectedGenres.includes(g),
+                  onChange: () => {
+                    setSelectedGenres((prev) =>
+                      prev.includes(g) ? prev.filter(x => x !== g) : [...prev, g]
+                    );
+                  }
+                }),
+                g
+              )
+            )
           )
         ),
     
@@ -247,48 +297,40 @@ function GamingTable() {
           React.createElement("strong", null, "Year:"),
           React.createElement(
             "div",
-            { style: { display: "flex", alignItems: "center", gap: "0.25rem" } },
+            { style: { display: "flex", gap: "0.5rem" } },
             React.createElement(
               "select",
               { value: minYear, onChange: (e) => setMinYear(e.target.value), style: { padding: "0.5rem" } },
-              [React.createElement("option", { key: "any", value: "" }, "Min")].concat(
-                allYears.map(y => React.createElement("option", { key: y, value: y }, y))
-              )
+              [React.createElement("option", { key: "any", value: "" }, "Min")].concat(allYears.map(y => React.createElement("option", { key: y, value: y }, y)))
             ),
             React.createElement("span", null, "to"),
             React.createElement(
               "select",
               { value: maxYear, onChange: (e) => setMaxYear(e.target.value), style: { padding: "0.5rem" } },
-              [React.createElement("option", { key: "any2", value: "" }, "Max")].concat(
-                allYears.map(y => React.createElement("option", { key: y, value: y }, y))
-              )
+              [React.createElement("option", { key: "any2", value: "" }, "Max")].concat(allYears.map(y => React.createElement("option", { key: y, value: y }, y)))
             )
           )
         ),
     
-        // Clear filters button
+        // Clear Filters button
         React.createElement(
-          "div",
-          { style: { display: "flex", flexDirection: "column", marginTop: "auto", alignSelf: "flex-start" } },
-          React.createElement(
-            "button",
-            { 
-              onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); },
-              style: { padding: "0.5rem 1rem", cursor: "pointer" }
-            },
-            "Clear Filters"
-          )
+          "button",
+          { 
+            onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); },
+            style: { padding: "0.5rem 1rem", cursor: "pointer" }
+          },
+          "Clear Filters"
         )
       ),
     
-      // RIGHT: Rows per page (bottom-aligned)
+      // RIGHT SIDE: Rows per page
       React.createElement(
         "div",
-        { style: { display: "flex", gap: "0.5rem", marginTop: "auto" } },
-        React.createElement("span", null, "Rows per page:"),
+        { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+        React.createElement("strong", null, "Rows per page:"),
         React.createElement(
           "select",
-          { value: pageSize, onChange: (e) => setPageSize(Number(e.target.value)) },
+          { value: pageSize, onChange: (e) => setPageSize(Number(e.target.value)), style: { padding: "0.5rem", minWidth: "120px" } },
           [10, 25, 50, 100].map(n => React.createElement("option", { key: n, value: n }, n))
         )
       )
