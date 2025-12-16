@@ -181,8 +181,8 @@ footer a:hover {
 
 /* Maintenance-only dashboard placeholder */
 .dashboard-placeholder.maintenance {
-  width: 100%;            /* fallback for small screens */
-  max-width: 480px;       /* match typical project-card width */
+  width: 100%;          /* fallback for small screens */
+  max-width: 480px;     /* narrow to card width */
   min-height: 320px;
   display: flex;
   align-items: center;
@@ -198,8 +198,13 @@ footer a:hover {
 /* Inner content */
 .dashboard-placeholder.maintenance .placeholder-inner {
   width: 100%;
-  max-width: 100%;
   text-align: center;
+}
+
+/* Ensure iframe only ever gets full width for live dashboards */
+.dashboard-section[data-dashboard] iframe {
+  width: 100%;
+  max-width: none;  /* no restriction for live dashboards */
 }
 
 /* Title spacing refinement */
