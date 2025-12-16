@@ -181,8 +181,8 @@ footer a:hover {
 
 /* Maintenance-only dashboard placeholder */
 .dashboard-placeholder.maintenance {
-  width: 100%;
-  max-width: 500px;       /* narrower width to reduce side whitespace */
+  width: auto;             /* shrink to content */
+  max-width: 500px;        /* optional max-width */
   min-height: 320px;
   display: flex;
   align-items: center;
@@ -191,7 +191,7 @@ footer a:hover {
   background: #fafafa;
   border: 1px dashed #d1d5db;
   border-radius: 12px;
-  padding: 2rem;          /* keep some padding for whitespace */
+  padding: 2rem;
   box-sizing: border-box;
 }
 
@@ -217,11 +217,12 @@ footer a:hover {
   color: #6b7280;
 }
 
-/* Center placeholder in dashboard section */
+/* Dashboard section for maintenance mode */
 .dashboard-section[data-dashboard] {
   display: flex;
-  justify-content: center;
-  padding: 1rem;          /* small padding around placeholder */
+  justify-content: center; /* center the frame */
+  padding: 0;              /* remove extra padding around the frame */
+  background: none;        /* optional: remove section background for a cleaner look */
 }
 
 .dashboard-section[data-dashboard] .iframe-wrapper {
