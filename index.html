@@ -33,6 +33,10 @@
   <meta name="theme-color" content="#0a0a0a">
 
   <link rel="stylesheet" href="style.css" />
+
+  <script>
+    const MAINTENANCE_MODE = true; // flip to false to restore dashboards
+  </script>
 </head>
   
 <body>
@@ -48,10 +52,10 @@
     <h2>📊 Cryptocurrency Market Overview</h2>
     <p class="project-subtitle">Market data visualized in Looker Studio using the CoinGecko API</p>
 
-    <div class="dashboard-section">
+    <div class="dashboard-section" data-dashboard>
       <div class="iframe-wrapper">
         <iframe
-          src="https://lookerstudio.google.com/embed/reporting/60f65be9-a823-4be3-81eb-75305ac2085e/page/6BSeF"
+          data-src="https://lookerstudio.google.com/embed/reporting/60f65be9-a823-4be3-81eb-75305ac2085e/page/6BSeF"
           width="600"
           height="360"
           style="border:0"
@@ -67,10 +71,10 @@
     <h2>📊 Cryptocurrency Performance Comparison</h2>
     <p class="project-subtitle">1-year performance comparison with selectable cryptocurrencies</p>
   
-    <div class="dashboard-section">
+    <div class="dashboard-section" data-dashboard>
       <div class="iframe-wrapper">
         <iframe
-          src="https://lookerstudio.google.com/embed/reporting/1ce42462-dcd7-4ed2-a245-e5f60038c1d4/page/NaffF"
+          data-src="https://lookerstudio.google.com/embed/reporting/1ce42462-dcd7-4ed2-a245-e5f60038c1d4/page/NaffF"
           width="600"
           height="360"
           style="border:0"
@@ -110,18 +114,28 @@
   </footer>
 
   <script>
-    async function checkHealth() {
-      try {
-        const res = await fetch("https://your-render-app.onrender.com/health");
-        const data = await res.json();
-        document.getElementById("status-text").textContent = data.status || "unknown";
-        document.getElementById("last-fetch").textContent = data.lastFetch || "n/a";
-        document.getElementById("cache-age").textContent = data.cacheAgeSec ?? "n/a";
-      } catch {
-        document.getElementById("status-text").textContent = "offline";
-      }
+    if (MAINTENANCE_MODE) {
+      // Remove dashboards
+      document.querySelectorAll('[data-dashboard]').forEach(el => {
+        el.innerHTML = `
+          <div class="maintenance-box">
+            <h3>Maintenance mode</h3>
+            <p>
+              This interactive dashboard is temporarily paused during back-end service updates.
+            </p>
+            <p class="muted">
+              The data pipeline, API service, and dashboard configuration remain available
+              via the linked GitHub repository below.
+            </p>
+          </div>
+        `;
+      });
+    } else {
+      // Restore dashboards
+      document.querySelectorAll('iframe[data-src]').forEach(iframe => {
+        iframe.src = iframe.dataset.src;
+      }); 
     }
-    checkHealth();
   </script>
 </body>
 </html>
