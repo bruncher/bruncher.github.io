@@ -117,6 +117,7 @@
     if (MAINTENANCE_MODE) {
       // Remove dashboards
       document.querySelectorAll('[data-dashboard]').forEach(el => {
+        el.classList.add('maintenance-mode');   // ← add this
         el.innerHTML = `
           <div class="dashboard-placeholder maintenance">
             <div class="placeholder-inner">
