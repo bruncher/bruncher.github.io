@@ -237,10 +237,10 @@ footer a:hover {
 
 /* Only for maintenance mode */
 .dashboard-section[data-dashboard].maintenance-mode {
-  max-width: 500px;   /* same as placeholder */
+  max-width: 500px;
   width: 100%;
-  margin: 0 auto;     /* center horizontally */
-  padding: 0;         /* optional */
+  margin: 0 auto;
+  padding-bottom: 2rem; /* adds extra space below the placeholder */
 }
 
 .dashboard-section[data-dashboard] .iframe-wrapper {
