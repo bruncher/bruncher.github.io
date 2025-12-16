@@ -231,6 +231,14 @@ footer a:hover {
   background: none;          /* optional: remove section background for a cleaner look */
 }
 
+/* Only for maintenance mode */
+.dashboard-section[data-dashboard].maintenance-mode {
+  max-width: 500px;   /* same as placeholder */
+  width: 100%;
+  margin: 0 auto;     /* center horizontally */
+  padding: 0;         /* optional */
+}
+
 .dashboard-section[data-dashboard] .iframe-wrapper {
   display: contents;
 }
