@@ -216,3 +216,13 @@ footer a:hover {
   margin-top: 0.6rem;
   color: #6b7280;
 }
+
+/* Center maintenance placeholder inside dashboard-section and ignore iframe-wrapper spacing */
+.dashboard-section[data-dashboard] {
+  display: flex;
+  justify-content: center;   /* horizontally center */
+}
+
+.dashboard-section[data-dashboard] .iframe-wrapper {
+  display: contents;         /* ignore layout, so placeholder fills flex container */
+}
