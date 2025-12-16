@@ -178,3 +178,40 @@ footer a:hover {
   margin-top: 0.0rem;  /* current spacing above note */
   margin-bottom: 1.5rem; /* add more space below so it’s separated from next card */
 }
+
+/* Maintenance-only dashboard placeholder */
+.dashboard-placeholder.maintenance {
+  width: 100%;
+  min-height: 420px;          /* gives vertical air */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fafafa;        /* slightly softer than pure white */
+  border: 1px dashed #d1d5db; /* calmer than solid border */
+  border-radius: 16px;
+
+  padding: 3rem 2rem;         /* outer breathing room */
+}
+
+/* Inner content constraint */
+.dashboard-placeholder.maintenance .placeholder-inner {
+  max-width: 520px;
+  text-align: center;
+}
+
+/* Title spacing refinement */
+.dashboard-placeholder.maintenance .placeholder-title {
+  margin-bottom: 1rem;
+}
+
+/* Paragraph spacing */
+.dashboard-placeholder.maintenance p {
+  margin: 0.5rem 0;
+}
+
+/* Muted text tone */
+.dashboard-placeholder.maintenance .muted {
+  margin-top: 0.75rem;
+  color: #6b7280;
+}
