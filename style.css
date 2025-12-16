@@ -182,36 +182,37 @@ footer a:hover {
 /* Maintenance-only dashboard placeholder */
 .dashboard-placeholder.maintenance {
   width: 100%;
-  min-height: 420px;          /* gives vertical air */
+  min-height: 320px;        /* reduce height from 420px */
+  max-width: 600px;         /* optional cap for very wide screens */
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #fafafa;        /* slightly softer than pure white */
-  border: 1px dashed #d1d5db; /* calmer than solid border */
-  border-radius: 16px;
+  background: #fafafa;      /* soft, neutral */
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;      /* slightly smaller radius */
 
-  padding: 3rem 2rem;         /* outer breathing room */
+  padding: 2rem 1.5rem;     /* reduced padding */
 }
 
 /* Inner content constraint */
 .dashboard-placeholder.maintenance .placeholder-inner {
-  max-width: 520px;
+  max-width: 460px;         /* slightly smaller to match new height */
   text-align: center;
 }
 
 /* Title spacing refinement */
 .dashboard-placeholder.maintenance .placeholder-title {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;   /* tighter spacing */
 }
 
 /* Paragraph spacing */
 .dashboard-placeholder.maintenance p {
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;         /* tighter spacing */
 }
 
 /* Muted text tone */
 .dashboard-placeholder.maintenance .muted {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   color: #6b7280;
 }
