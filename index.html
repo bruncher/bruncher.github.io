@@ -118,15 +118,18 @@
       // Remove dashboards
       document.querySelectorAll('[data-dashboard]').forEach(el => {
         el.innerHTML = `
-          <div class="maintenance-box">
-            <h3>Maintenance mode</h3>
-            <p>
-              This interactive dashboard is temporarily paused during back-end service updates.
-            </p>
-            <p class="muted">
-              The data pipeline, API service, and dashboard configuration remain available
-              via the linked GitHub repository below.
-            </p>
+          <div class="dashboard-placeholder">
+            <div class="placeholder-inner">
+              <div class="placeholder-icon">📊</div>
+              <h3>Dashboard temporarily unavailable</h3>
+              <p>
+                This interactive dashboard is paused during back-end service updates.
+              </p>
+              <p class="muted">
+                The data pipeline, API service, and dashboard configuration remain available
+                via the linked GitHub repository below.
+              </p>
+            </div>
           </div>
         `;
       });
