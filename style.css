@@ -182,22 +182,22 @@ footer a:hover {
 /* Maintenance-only dashboard placeholder */
 .dashboard-placeholder.maintenance {
   width: 100%;
-  min-height: 320px;        /* reduce height from 420px */
-  max-width: 600px;         /* optional cap for very wide screens */
+  max-width: 500px;       /* narrower width to reduce side whitespace */
+  min-height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #fafafa;      /* soft, neutral */
+  background: #fafafa;
   border: 1px dashed #d1d5db;
-  border-radius: 12px;      /* slightly smaller radius */
-
-  padding: 2rem 1.5rem;     /* reduced padding */
+  border-radius: 12px;
+  padding: 2rem;          /* keep some padding for whitespace */
+  box-sizing: border-box;
 }
 
 /* Inner content constraint */
 .dashboard-placeholder.maintenance .placeholder-inner {
-  max-width: 460px;         /* slightly smaller to match new height */
+  max-width: 420px;       /* content constrained, keeps card compact */
   text-align: center;
 }
 
@@ -217,12 +217,13 @@ footer a:hover {
   color: #6b7280;
 }
 
-/* Center maintenance placeholder inside dashboard-section and ignore iframe-wrapper spacing */
+/* Center placeholder in dashboard section */
 .dashboard-section[data-dashboard] {
   display: flex;
-  justify-content: center;   /* horizontally center */
+  justify-content: center;
+  padding: 1rem;          /* small padding around placeholder */
 }
 
 .dashboard-section[data-dashboard] .iframe-wrapper {
-  display: contents;         /* ignore layout, so placeholder fills flex container */
+  display: contents;
 }
