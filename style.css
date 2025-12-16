@@ -181,8 +181,8 @@ footer a:hover {
 
 /* Maintenance-only dashboard placeholder */
 .dashboard-placeholder.maintenance {
-  width: 100%;          /* fallback for small screens */
-  max-width: 480px;     /* narrow to card width */
+  width: 100%;
+  max-width: 480px;
   min-height: 320px;
   display: flex;
   align-items: center;
@@ -192,6 +192,10 @@ footer a:hover {
   border: 1px dashed #d1d5db;
   border-radius: 12px;
   padding: 2rem;
+
+  /* NEW */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   box-sizing: border-box;
 }
 
