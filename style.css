@@ -246,3 +246,8 @@ footer a:hover {
 .dashboard-section[data-dashboard] .iframe-wrapper {
   display: contents;
 }
+
+/* Maintenance mode: add space AFTER the card only */
+.dashboard-section.maintenance-mode {
+  margin-bottom: 3rem; /* increase as needed */
+}
