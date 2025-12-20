@@ -249,5 +249,5 @@ footer a:hover {
 
 /* Maintenance mode: add space AFTER the whole section */
 .projects.maintenance-project {
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
