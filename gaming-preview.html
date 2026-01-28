@@ -60,7 +60,7 @@ function GamingTable() {
   React.useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("https://gaming-api-4ic4.onrender.com/deals");
+        const res = await fetch("https://bruncher-api.onrender.com/gaming/deals");
         const json = await res.json();
         setData(json.deals || []);
       } catch (e) {
