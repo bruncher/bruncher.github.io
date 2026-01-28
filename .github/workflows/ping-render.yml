@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Ping Render service
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://gaming-api-4ic4.onrender.com/ping || echo "000")
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://bruncher-api.onrender.com/ping || echo "000")
           echo "Render ping returned status: $STATUS"
