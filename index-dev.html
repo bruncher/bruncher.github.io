@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio | Dashboards & Analytics</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXS7Z25WEJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-NXS7Z25WEJ');
+  </script>
+
+  <!-- SEO Meta -->
+  <meta name="description" content="Portfolio of dashboards and analytics projects focused on business insights and market data." />
+  <meta name="keywords" content="data analytics, dashboard, data visualization, market performance, market cap, cryptocurrency, Looker Studio, CoinGecko API, analytics portfolio" />
+  <meta name="author" content="bruncher" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Dashboards & Analytics Portfolio" />
+  <meta property="og:description" content="Explore business insights dashboards, market performance comparisons, and analytics projects built with Looker Studio data visualizations and API connections." />
+  <meta property="og:image" content="https://bruncher.github.io/favicon.png" />
+  <meta property="og:url" content="https://bruncher.github.io" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="theme-color" content="#0a0a0a">
+
+  <link rel="stylesheet" href="style.css" />
+
+  <script>
+    const MAINTENANCE_MODE = false; // flip to false to restore dashboards
+  </script>
+</head>
+  
+<body>
+
+  <!-- Hero Banner -->
+  <header class="hero">
+    <h1>Dashboards & Analytics Portfolio</h1>
+  </header>
+
+<main>
+  <!-- Dashboard Section -->
+  <section class="projects">
+    <h2>📊 Cryptocurrency Market Overview</h2>
+    <p class="project-subtitle">Market data visualized in Looker Studio using the CoinGecko API</p>
+
+    <div class="dashboard-section" data-dashboard>
+      <div class="iframe-wrapper">
+        <iframe
+          data-src="https://lookerstudio.google.com/embed/reporting/60f65be9-a823-4be3-81eb-75305ac2085e/page/6BSeF"
+          width="600"
+          height="360"
+          style="border:0"
+          frameborder="0"
+          allowfullscreen
+          sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects">
+    <h2>📊 Cryptocurrency Performance Comparison</h2>
+    <p class="project-subtitle">1-year performance comparison with selectable cryptocurrencies</p>
+  
+    <div class="dashboard-section" data-dashboard>
+      <div class="iframe-wrapper">
+        <iframe
+          data-src="https://lookerstudio.google.com/embed/reporting/1ce42462-dcd7-4ed2-a245-e5f60038c1d4/page/NaffF"
+          width="600"
+          height="360"
+          style="border:0"
+          frameborder="0"
+          allowfullscreen
+          sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+        </iframe>
+      </div>
+    </div>
+    <p class="data-note">
+      Chart data refreshes approximately every 12 hours.
+    </p>
+  </section>
+
+  <!-- Data Collector Section -->
+  <section class="project-card">
+    <h3>💾 Data Collector Service</h3>
+    <p>
+      Node.js microservice that retrieves and caches digital asset market data from the
+      <a href="https://www.coingecko.com/en/api" target="_blank" rel="noopener">CoinGecko API</a>.
+      It provides updated market cap data every 15 minutes and performance history data every 3 hours.
+    </p>
+    <a class="btn-link" href="https://github.com/bruncher/coingecko-wrapper" target="_blank" rel="noopener">
+      View on GitHub →
+    </a>
+  </section>
+
+  <!-- Coming Soon -->
+  <section class="project-card coming-soon">
+    <h3>📈 Coming Soon</h3>
+    <p>More dashboard and analytics projects coming soon.</p>
+  </section>
+</main>
+
+  <footer>
+    <p>© 2025 — Built with Looker Studio and Node.js</p>
+  </footer>
+
+  <script>
+    if (MAINTENANCE_MODE) {
+      // Remove dashboards
+      document.querySelectorAll('[data-dashboard]').forEach(el => {
+        el.classList.add('maintenance-mode');
+    
+        // mark the parent section
+        const section = el.closest('.projects');
+        if (section) {
+          section.classList.add('maintenance-project');
+        }
+        
+        el.innerHTML = `
+          <div class="dashboard-placeholder maintenance">
+            <div class="placeholder-inner">
+              <h3 class="placeholder-title">
+                <span class="placeholder-icon">🔧</span>
+                Dashboard currently under maintenance
+              </h3>
+              <p>
+                This interactive dashboard is paused during back-end service updates.
+              </p>
+              <p class="muted">
+                The data pipeline, API service, and dashboard configuration remain available
+                via the linked GitHub repository below.
+              </p>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      // Restore dashboards
+      document.querySelectorAll('iframe[data-src]').forEach(iframe => {
+        iframe.src = iframe.dataset.src;
+      }); 
+    }
+  </script>
+</body>
+</html>
