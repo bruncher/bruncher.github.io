@@ -1,1 +1,253 @@
+/* Reset + basics */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+html, body {
+  overflow-x: hidden;
+}
+
+/* Background – slightly darker for contrast */
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: #f1f2f6; /* was #f6f7fb — a touch darker, softer tone */
+  color: #222;
+  line-height: 1.5;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Hero */
+.hero {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  background: linear-gradient(90deg, #111827, #1f2937);
+  color: white;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0;
+}
+
+/* Main Layout */
+main {
+  width: 100%;
+  max-width: 1100px;
+  padding: 2rem 1rem 4rem;
+}
+
+/* Section headers */
+.projects h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* Dashboard section – tighter spacing */
+.dashboard-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Dashboard iframe – tuned heights for desktop / tablet */
+.dashboard-section iframe {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  display: block;
+  height: 640px; /* stays fine for desktop */
+}
+
+/* Project cards – same white but more spacing between them */
+.project-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem; /* updated here */
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.project-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.project-card p {
+  color: #444;
+  margin-bottom: 0.75rem;
+}
+
+/* Button links (e.g., GitHub) */
+.btn-link {
+  display: inline-block;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.btn-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* Coming soon card – match spacing and shadow */
+.coming-soon {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: left; /* keep aligned with other cards */
+}
+
+.coming-soon h3 {
+  color: #222;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #0077ff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .dashboard-section {
+    padding: 0.5rem 1rem;
+    overflow: hidden; /* prevent white gap & iframe scrollbars */
+  }
+
+  .iframe-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* maintains aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .iframe-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 8px;
+    display: block;
+  }
+
+  .hero {
+    padding: 1.25rem 1rem;
+  }
+}
+
+.data-note {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-top: 0.0rem;  /* current spacing above note */
+  margin-bottom: 1.5rem; /* add more space below so it’s separated from next card */
+}
+
+/* Maintenance-only dashboard placeholder */
+.dashboard-placeholder.maintenance {
+  width: 100%;
+  max-width: 480px;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fafafa;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 2rem;
+
+  /* NEW */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+/* Inner content */
+.dashboard-placeholder.maintenance .placeholder-inner {
+  width: 100%;
+  text-align: center;
+}
+
+/* Ensure iframe only ever gets full width for live dashboards */
+.dashboard-section[data-dashboard] iframe {
+  width: 100%;
+  max-width: none;  /* no restriction for live dashboards */
+}
+
+/* Title spacing refinement */
+.dashboard-placeholder.maintenance .placeholder-title {
+  margin-bottom: 0.75rem;   /* tighter spacing */
+}
+
+/* Paragraph spacing */
+.dashboard-placeholder.maintenance p {
+  margin: 0.4rem 0;         /* tighter spacing */
+}
+
+/* Muted text tone */
+.dashboard-placeholder.maintenance .muted {
+  margin-top: 0.6rem;
+  color: #6b7280;
+}
+
+/* Center placeholder inside dashboard section */
+.dashboard-section[data-dashboard] {
+  display: flex;
+  justify-content: center;   /* horizontally center placeholder */
+  padding: 0;                /* remove extra padding around placeholder */
+  background: none;          /* optional: remove section background for a cleaner look */
+}
+
+/* Only for maintenance mode */
+.dashboard-section[data-dashboard].maintenance-mode {
+  max-width: 500px;   /* same as placeholder */
+  width: 100%;
+  margin: 0 auto;     /* center horizontally */
+  padding: 0;         /* optional */
+}
+
+.dashboard-section[data-dashboard] .iframe-wrapper {
+  display: contents;
+}
+
+/* Maintenance mode: add space AFTER the whole section */
+.projects.maintenance-project {
+  margin-bottom: 2.5rem;
+}
