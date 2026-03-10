@@ -251,3 +251,85 @@ footer a:hover {
 .projects.maintenance-project {
   margin-bottom: 2.5rem;
 }
+
+/* ===== APP LAYOUT WITH LEFT SIDEBAR ===== */
+.app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #f1f2f6;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 220px;
+  background: #111827; /* dark/nav color */
+  color: white;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1rem;
+}
+
+#sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sidebar ul li {
+  margin-bottom: 0.75rem;
+}
+
+#sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+#sidebar ul li a:hover,
+#sidebar ul li a.active {
+  background: #1f2937; /* slightly lighter hover */
+}
+
+/* Main content adjusts to sidebar */
+.app-content {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 1000px; /* optional, keeps content narrower */
+}
+
+/* Hero spans full content width */
+.app-content .hero {
+  margin-left: 0; /* reset hero full width behavior for sidebar layout */
+  width: 100%;
+}
+
+/* Responsive: sidebar collapses on mobile */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
+}
