@@ -264,8 +264,8 @@ footer a:hover {
 
 /* Sidebar */
 #sidebar {
-  width: 220px;
-  background: #111827; /* dark/nav color */
+  width: 180px;
+  background: #1f2937; /* dark/nav color */
   color: white;
   flex-shrink: 0;
   display: flex;
