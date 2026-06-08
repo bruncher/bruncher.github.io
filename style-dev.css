@@ -75,7 +75,7 @@ main {
   border: none;
   border-radius: 8px;
   display: block;
-  height: 720px; /* stays fine for desktop */
+  height: 740px; /* stays fine for desktop */
 }
 
 /* Project cards – same white but more spacing between them */
