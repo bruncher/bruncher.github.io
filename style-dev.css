@@ -45,15 +45,18 @@ main {
 }
 
 /* Section headers */
-.projects h2 {
+.projects h2,
+.project-subtitle {
   text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
   transform: translateX(-60px);
 }
 
+.projects h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
 .project-subtitle {
-  text-align: center;
   color: #555;
   margin-bottom: 1.5rem;
 }
