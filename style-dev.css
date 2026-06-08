@@ -49,6 +49,7 @@ main {
   text-align: center;
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
+  transform: translateX(-60px);
 }
 
 .project-subtitle {
@@ -171,6 +172,10 @@ footer a:hover {
 
   .hero {
     padding: 1.25rem 1rem;
+  }
+
+  .projects h2 {
+    transform: none;
   }
 }
 
