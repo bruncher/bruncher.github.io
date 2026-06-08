@@ -307,12 +307,11 @@ footer a:hover {
   color: white;
   text-decoration: none;
   transition: background 0.2s ease;
-  border-left: 3px solid transparent;
 }
 
 #sidebar ul li a:hover,
 #sidebar ul li a.active {
-  background: linear-gradient(90deg, #172033, #273548);
+  background: #273548;
 }
 
 /* Main content adjusts to sidebar */
