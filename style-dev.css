@@ -40,7 +40,7 @@ body {
 /* Main Layout */
 main {
   width: 100%;
-  max-width: 1100px;
+  max-width: none;
   padding: 2rem 1rem 4rem;
 }
 
@@ -64,6 +64,7 @@ main {
   padding: 0.75rem 1.25rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
 /* Dashboard iframe – tuned heights for desktop / tablet */
@@ -311,8 +312,8 @@ footer a:hover {
 /* Main content adjusts to sidebar */
 .app-content {
   flex: 1;
-  padding: 2rem 1rem;
-  max-width: 1000px; /* optional, keeps content narrower */
+  padding: 2rem;
+  max-width: none; /* optional, keeps content narrower */
 }
 
 /* Responsive: sidebar collapses on mobile */
