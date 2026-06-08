@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gaming Deals Preview</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:,">
+
+<script type="module" crossorigin>
+import React from "https://esm.sh/react@18.3.1";
+import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
+
+function GamingTable() {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  // Pagination state
+  const [pageSize, setPageSize] = React.useState(25);
+  const [page, setPage] = React.useState(1);
+
+  // SORTING STATE
+  const [sortConfig, setSortConfig] = React.useState({
+    key: "avgScore",
+    direction: "desc", // highest avg first
+  });
+
+  const [selectedGenres, setSelectedGenres] = React.useState([]);
+
+  const [minYear, setMinYear] = React.useState("");
+  const [maxYear, setMaxYear] = React.useState("");
+
+  const [genreDropdownOpen, setGenreDropdownOpen] = React.useState(false);
+
+  const cellStyle = { 
+    padding: "0.5rem 0.75rem",
+    textAlign: "left",
+    borderBottom: "1px solid #ddd",
+    verticalAlign: "middle"
+  };
+
+  const getSortArrow = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "asc" ? " ▲" : " ▼";
+  };
+  
+  // Sort handler
+  const handleSort = (columnKey) => {
+    setSortConfig((prev) => {
+      if (prev.key === columnKey) {
+        return {
+          key: columnKey,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      }
+      return { key: columnKey, direction: "asc" };
+    });
+  };
+
+  React.useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("https://bruncher-api.onrender.com/gaming/deals");
+        const json = await res.json();
+        setData(json.deals || []);
+      } catch (e) {
+        console.error("Error fetching deals:", e);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const genreRef = React.useRef();
+
+  React.useEffect(() => {
+    function handleClickOutside(event) {
+      if (genreRef.current && !genreRef.current.contains(event.target)) {
+        setGenreDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const STORE_NAMES = {
+    "steam": "Steam",
+    "humble store": "Humble Store",
+    "fanatical": "Fanatical",
+  };
+
+  function normalizeStoreName(name) {
+    return String(name)
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, "")
+      .trim();
+  }
+
+  function forceHttps(url) {
+    if (!url) return url;
+    return url.replace(/^http:\/\//i, "https://");
+  }
+
+  // After fetching data and setting it
+  const processedData = React.useMemo(() => {
+    return data.map(item => {
+      const scores = [];
+  
+      if (!isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0)
+        scores.push(Number(item.metacriticScore));
+  
+      if (!isNaN(Number(item.steamRatingPercent)) && Number(item.steamRatingPercent) > 0)
+        scores.push(Number(item.steamRatingPercent));
+  
+      if (item.dealRating != null)
+        scores.push(Number(item.dealRating) * 10);
+  
+      return {
+        ...item,
+        storeName: STORE_NAMES[normalizeStoreName(item.storeName)] ?? item.storeName,
+        year: item.steamMeta?.year ? Number(item.steamMeta.year) : null,
+        genres: Array.isArray(item.steamMeta?.genres) ? item.steamMeta.genres : [],
+        avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
+        metacriticScore:
+          !isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0
+            ? Number(item.metacriticScore)
+            : null,
+      };
+    });
+  }, [data]);
+
+  const allGenres = React.useMemo(() => {
+    const set = new Set();
+    processedData.forEach(item => {
+      item.genres?.forEach(g => set.add(g));
+    });
+    return Array.from(set).sort();
+  }, [processedData]);
+
+  const allYears = React.useMemo(() => {
+    const years = processedData
+      .map(item => item.year)
+      .filter(y => y != null);
+    return Array.from(new Set(years)).sort((a, b) => a - b);
+  }, [processedData]);
+  
+  // FILTERED DATA (genres + year range)
+  const filteredData = React.useMemo(() => {
+    return processedData.filter(item => {
+      // Genre filter
+      const passesGenre =
+        selectedGenres.length === 0 ||
+        selectedGenres.every(g => item.genres?.includes(g));
+  
+      // Year filter
+      const y = item.year;
+      const passesYear =
+        (!minYear || (y != null && y >= Number(minYear))) &&
+        (!maxYear || (y != null && y <= Number(maxYear)));
+  
+      return passesGenre && passesYear;
+    });
+  }, [processedData, selectedGenres, minYear, maxYear]);
+  
+  // SORTED DATA (sort AFTER filtering)
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return filteredData;
+  
+    return [...filteredData].sort((a, b) => {
+      let x = a[sortConfig.key];
+      let y = b[sortConfig.key];
+    
+      // Numeric sorts
+      if (sortConfig.key === "year" || sortConfig.key === "avgScore") {
+        x = x != null ? Number(x) : -Infinity;
+        y = y != null ? Number(y) : -Infinity;
+      }
+    
+      if (sortConfig.key === "salePrice") {
+        x = x != null ? Number(x) : Infinity; // missing salePrice goes to bottom
+        y = y != null ? Number(y) : Infinity;
+      }
+    
+      const nx = Number(x);
+      const ny = Number(y);
+    
+      if (!isNaN(nx) && !isNaN(ny)) {
+        return sortConfig.direction === "asc" ? nx - ny : ny - nx;
+      }
+    
+      // Fallback to alphabetical
+      return sortConfig.direction === "asc"
+        ? String(x).localeCompare(String(y))
+        : String(y).localeCompare(String(x));
+    });
+  }, [filteredData, sortConfig]);
+  
+  // PAGINATION (after sorting)
+  const totalPages = Math.ceil(sortedData.length / pageSize);
+  const start = (page - 1) * pageSize;
+  const visible = sortedData.slice(start, start + pageSize);
+
+  // Reset to page 1 when page size changes
+  React.useEffect(() => {
+    setPage(1);
+  }, [pageSize]);
+
+  if (loading)
+    return React.createElement("p", { style: { textAlign: "center" } }, "Loading…");
+
+  if (!data.length)
+    return React.createElement("p", { style: { textAlign: "center" } }, "No deals found.");
+  
+  return React.createElement(
+    "div",
+    null,
+  
+    // Filters + control
+    React.createElement(
+      "div",
+      {
+        style: {
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "1rem",
+          marginBottom: "1rem",
+          alignItems: "center",
+          justifyContent: "space-between" // pushes page size to the right
+        }
+      },
+    
+      // LEFT SIDE: Genre, Year, Clear
+      React.createElement(
+        "div",
+        { style: { display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" } },
+    
+      // Genre filter as dropdown with checkboxes
+      React.createElement(
+        "div",
+        { 
+          style: { display: "flex", flexDirection: "column", gap: "0.25rem", position: "relative" },
+          ref: genreRef
+        },
+        React.createElement("strong", null, "Genre:"),
+        React.createElement(
+          "div",
+          {
+            style: {
+              padding: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              minWidth: "150px",
+              maxWidth: "200px",
+              cursor: "pointer",
+              userSelect: "none",
+            },
+            onClick: () => setGenreDropdownOpen((open) => !open),
+          },
+          selectedGenres.length === 0
+            ? "Select genres..."
+            : selectedGenres.length <= 3
+            ? selectedGenres.join(", ")
+            : `${selectedGenres.length} selected`
+        ),
+        genreDropdownOpen &&
+          React.createElement(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                maxHeight: "200px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                background: "#fff",
+                zIndex: 10,
+                padding: "0.5rem",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
+              }
+            },
+            allGenres.map((g) =>
+              React.createElement(
+                "label",
+                {
+                  key: g,
+                  style: { display: "flex", alignItems: "center", gap: "0.25rem", cursor: "pointer" }
+                },
+                React.createElement("input", {
+                  type: "checkbox",
+                  checked: selectedGenres.includes(g),
+                  onChange: () => {
+                    setSelectedGenres((prev) =>
+                      prev.includes(g) ? prev.filter(x => x !== g) : [...prev, g]
+                    );
+                  }
+                }),
+                g
+              )
+            )
+          )
+        ),
+    
+        // Year filter
+        React.createElement(
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+          React.createElement("strong", null, "Year:"),
+          React.createElement(
+            "div",
+            { style: { display: "flex", gap: "0.5rem" } },
+            React.createElement(
+              "select",
+              { value: minYear, onChange: (e) => setMinYear(e.target.value), style: { padding: "0.5rem" } },
+              [React.createElement("option", { key: "any", value: "" }, "Min")].concat(allYears.map(y => React.createElement("option", { key: y, value: y }, y)))
+            ),
+            React.createElement("span", null, "to"),
+            React.createElement(
+              "select",
+              { value: maxYear, onChange: (e) => setMaxYear(e.target.value), style: { padding: "0.5rem" } },
+              [React.createElement("option", { key: "any2", value: "" }, "Max")].concat(allYears.map(y => React.createElement("option", { key: y, value: y }, y)))
+            )
+          )
+        ),
+    
+        // Clear Filters column (invisible title)
+        React.createElement(
+          "div",
+          { style: { display: "flex", flexDirection: "column", gap: "0.25rem", marginLeft: "0.5rem" } },
+          React.createElement("strong", { style: { visibility: "hidden" } }, "Clear Filters"),
+          React.createElement(
+            "button",
+            { onClick: () => { setSelectedGenres([]); setMinYear(""); setMaxYear(""); }, style: { padding: "0.5rem 1rem", cursor: "pointer" } },
+            "Clear Filters"
+          )
+        ),
+      ),
+    
+      // RIGHT SIDE: Rows per page
+      React.createElement(
+        "div",
+        { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+        React.createElement("strong", null, "Rows per page:"),
+        React.createElement(
+          "select",
+          { value: pageSize, onChange: (e) => setPageSize(Number(e.target.value)), style: { padding: "0.5rem", minWidth: "120px" } },
+          [10, 25, 50, 100].map(n => React.createElement("option", { key: n, value: n }, n))
+        )
+      )
+    ),
+    
+    // TABLE
+    React.createElement(
+      "div",
+      { style: { overflowX: "auto", marginTop: "1rem" } },
+      React.createElement(
+        "table",
+        { style: { width: "100%", borderCollapse: "collapse" } },
+        React.createElement(
+          "thead",
+          null,
+          React.createElement(
+            "tr",
+            null,
+            React.createElement("th", { style: cellStyle }, "Thumb"),
+     
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("title"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Title", getSortArrow("title"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("storeName"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Store", getSortArrow("storeName"))
+            ),
+
+            React.createElement(
+              "th",
+              { style: cellStyle },
+              React.createElement("span", null, "Genres")
+            ),
+            
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("year"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Year", getSortArrow("year"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("salePrice"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Price", getSortArrow("salePrice"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("metacriticScore"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Metacritic", getSortArrow("metacriticScore"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("steamRatingPercent"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Steam", getSortArrow("steamRatingPercent"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("dealRating"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Deal", getSortArrow("dealRating"))
+            ),
+        
+            React.createElement(
+              "th",
+              { onClick: () => handleSort("avgScore"), style: { ...cellStyle, cursor: "pointer" } },
+              React.createElement("span", null, "Avg", getSortArrow("avgScore"))
+            )
+          )
+        ),
+        
+        React.createElement(
+          "tbody",
+          null,
+          visible.map((item) =>
+            React.createElement(
+              "tr",
+              { key: item.dealID },
+              // THUMB (clickable)
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                React.createElement(
+                  "a",
+                  { href: forceHttps(`https://www.cheapshark.com/redirect?dealID=${item.dealID}`), target: "_blank", rel: "noopener noreferrer" },
+                  React.createElement("img", {
+                    src: item.thumb,
+                    alt: item.title,
+                    style: { height: "50px", cursor: "pointer" }
+                  })
+                )
+              ),
+              
+              // TITLE (clickable)
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                React.createElement(
+                  "a",
+                  {
+                    href: forceHttps(`https://www.cheapshark.com/redirect?dealID=${item.dealID}`),
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    style: { color: "inherit", textDecoration: "underline" }
+                  },
+                  item.title
+                )
+              ),
+              React.createElement("td", { style: cellStyle }, item.storeName),
+              // GENRES
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                item.genres?.length ? item.genres.slice(0, 3).join(", ") : "-"
+              ),
+              
+              // YEAR
+              React.createElement(
+                "td",
+                { style: cellStyle },
+                item.year || "-"
+              ),
+              React.createElement("td", { style: cellStyle }, `$${item.salePrice != null ? Number(item.salePrice).toFixed(2) : "-"}`),
+              React.createElement("td", { style: cellStyle }, item.metacriticScore || "-"),
+              React.createElement("td", { style: cellStyle }, item.steamRatingPercent || "-"),
+              React.createElement("td", { style: cellStyle }, item.dealRating || "-"),
+              React.createElement("td", { style: cellStyle }, item.avgScore != null ? item.avgScore.toFixed(1) : "-")
+            )
+          )
+        )
+      )
+    ),
+  
+    // PAGINATION CONTROLS
+    React.createElement(
+      "div",
+      { style: { marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" } },
+      React.createElement(
+        "button",
+        { disabled: page === 1, onClick: () => setPage((p) => Math.max(1, p - 1)) },
+        "Prev"
+      ),
+      React.createElement("span", null, `Page ${page} of ${totalPages}`),
+      React.createElement(
+        "button",
+        { disabled: page === totalPages, onClick: () => setPage((p) => Math.min(totalPages, p + 1)) },
+        "Next"
+      )
+    )
+  );
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const root = createRoot(document.getElementById("app"));
+  root.render(React.createElement(GamingTable));
+});
+
+</script>
+</head>
+<body>
+<main style="max-width: 1100px; padding: 2rem 1rem; margin: 0 auto;">
+  <h1 style="text-align:center; margin-bottom: 1rem;">Gaming Deals Preview</h1>
+  <p style="text-align:center; color:#555;">This page is not linked publicly — safe to experiment.</p>
+
+  <div class="dashboard-section">
+    <h2 style="text-align:center; margin-bottom:1rem;">Steam-Compatible Gaming Deals</h2>
+    <div id="app"></div>
+  </div>
+</main>
+</body>
+</html>
