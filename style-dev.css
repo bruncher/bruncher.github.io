@@ -23,7 +23,7 @@ body {
   width: 100%;
   display: block;
 
-  background: linear-gradient(90deg, #111827, #1f2937);
+  background: linear-gradient(90deg, #1b365d, #284b7a);
   color: white;
 
   padding: 2.5rem 1rem;
@@ -265,7 +265,7 @@ footer a:hover {
 /* Sidebar */
 #sidebar {
   width: 200px;
-  background: #1e2a3a;
+  background: #32527b;
   color: white;
   flex-shrink: 0;
   display: flex;
