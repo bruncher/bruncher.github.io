@@ -65,6 +65,8 @@ main {
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   width: 100%;
+  max-width: 1300px;
+  margin: 0 auto 2rem;
 }
 
 /* Dashboard iframe – tuned heights for desktop / tablet */
