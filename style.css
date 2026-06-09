@@ -321,6 +321,21 @@ footer a:hover {
   max-width: none; /* optional, keeps content narrower */
 }
 
+footer {
+  width: 100%;
+  display: block;
+
+  background: linear-gradient(90deg, #172033, #273548);
+  color: #cfd6e4;
+
+  padding: 1.2rem 1rem;
+  text-align: center;
+
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+
+  font-size: 0.9rem;
+}
+
 /* Responsive: sidebar collapses on mobile */
 @media (max-width: 768px) {
   .app {
