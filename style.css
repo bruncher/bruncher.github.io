@@ -11,48 +11,52 @@ html, body {
 
 /* Background – slightly darker for contrast */
 body {
+  margin: 0;
   font-family: "Inter", system-ui, sans-serif;
-  background: #f1f2f6; /* was #f6f7fb — a touch darker, softer tone */
+  background: #f1f2f6;
   color: #222;
   line-height: 1.5;
   font-size: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* Hero */
-.hero {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  background: linear-gradient(90deg, #111827, #1f2937);
+.topbar {
+  width: 100%;
+  display: block;
+
+  background: linear-gradient(90deg, #172033, #273548);
   color: white;
-  text-align: center;
+
   padding: 2.5rem 1rem;
+  text-align: center;
+
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.hero h1 {
+.topbar h1 {
   font-size: 2.2rem;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 /* Main Layout */
 main {
   width: 100%;
-  max-width: 1100px;
+  max-width: none;
   padding: 2rem 1rem 4rem;
 }
 
 /* Section headers */
-.projects h2 {
+.projects h2,
+.project-subtitle {
   text-align: center;
+  transform: translateX(-60px);
+}
+
+.projects h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
 }
 
 .project-subtitle {
-  text-align: center;
   color: #555;
   margin-bottom: 1.5rem;
 }
@@ -64,6 +68,9 @@ main {
   padding: 0.75rem 1.25rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto 2rem;
 }
 
 /* Dashboard iframe – tuned heights for desktop / tablet */
@@ -72,7 +79,7 @@ main {
   border: none;
   border-radius: 8px;
   display: block;
-  height: 640px; /* stays fine for desktop */
+  height: 750px; /* stays fine for desktop */
 }
 
 /* Project cards – same white but more spacing between them */
@@ -169,6 +176,10 @@ footer a:hover {
   .hero {
     padding: 1.25rem 1rem;
   }
+
+  .projects h2 {
+    transform: none;
+  }
 }
 
 .data-note {
@@ -250,4 +261,79 @@ footer a:hover {
 /* Maintenance mode: add space AFTER the whole section */
 .projects.maintenance-project {
   margin-bottom: 2.5rem;
+}
+
+/* ===== APP LAYOUT WITH LEFT SIDEBAR ===== */
+.app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #f1f2f6;
+
+  align-items: stretch;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 200px;
+  background: #263547;
+  color: white;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem 0;
+}
+
+#sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#sidebar ul li {
+  margin: 0;
+}
+
+#sidebar ul li a {
+  display: block;
+  padding: 0.65rem 1rem;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+#sidebar ul li a:hover,
+#sidebar ul li a.active {
+  background: #172033;
+}
+
+/* Main content adjusts to sidebar */
+.app-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: none; /* optional, keeps content narrower */
+}
+
+/* Responsive: sidebar collapses on mobile */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
 }
