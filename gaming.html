@@ -33,6 +33,8 @@ function GamingTable() {
 
   const [genreDropdownOpen, setGenreDropdownOpen] = React.useState(false);
 
+  const [currency, setCurrency] = React.useState("USD");
+
   const cellStyle = { 
     padding: "0.5rem 0.75rem",
     textAlign: "left",
@@ -61,7 +63,9 @@ function GamingTable() {
   React.useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("https://bruncher-api.onrender.com/gaming/deals");
+        const res = await fetch(
+          `https://bruncher-api.onrender.com/gaming/deals?currency=${currency}`
+        );
         const json = await res.json();
         setData(json.deals || []);
       } catch (e) {
@@ -72,7 +76,7 @@ function GamingTable() {
       }
     }
     load();
-  }, []);
+  }, [currency]);
 
   const genreRef = React.useRef();
 
