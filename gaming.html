@@ -429,7 +429,7 @@ function GamingTable() {
             React.createElement(
               "th",
               { onClick: () => handleSort("salePrice"), style: { ...cellStyle, cursor: "pointer" } },
-              React.createElement("span", null, "Price", getSortArrow("salePrice"))
+              React.createElement("span", null, "Price (USD)", getSortArrow("salePrice"))
             ),
         
             React.createElement(
@@ -570,7 +570,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     <section class="projects">
       <h2>🎮 Steam-Compatible Gaming Deals</h2>
-        <p class="project-subtitle">PC gaming deals ranked and filterable using API data from CheapShark and Steam</p>
+        <p class="project-subtitle">PC gaming deals ranked and filterable using API data from CheapShark (USD only) and Steam</p>
       <div class="dashboard-section">
 
         <div id="app"></div>
