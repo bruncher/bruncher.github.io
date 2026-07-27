@@ -114,6 +114,62 @@ function GamingTable() {
     window.scrollTo(0, 0);
   }
 
+  function renderPagination() {
+    return React.createElement(
+      "div",
+      {
+        style: {
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          gap: "1rem",
+        }
+      },
+  
+      React.createElement(
+        "button",
+        {
+          disabled: page === 1,
+          onClick: () => changePage(1)
+        },
+        "<< First"
+      ),
+  
+      React.createElement(
+        "button",
+        {
+          disabled: page === 1,
+          onClick: () => changePage(Math.max(1, page - 1))
+        },
+        "Prev"
+      ),
+  
+      React.createElement(
+        "span",
+        null,
+        `Page ${page} of ${totalPages}`
+      ),
+  
+      React.createElement(
+        "button",
+        {
+          disabled: page === totalPages,
+          onClick: () => changePage(Math.min(totalPages, page + 1))
+        },
+        "Next"
+      ),
+  
+      React.createElement(
+        "button",
+        {
+          disabled: page === totalPages,
+          onClick: () => changePage(totalPages)
+        },
+        "Last >>"
+      )
+    );
+  }
+
   // After fetching data and setting it
   const processedData = React.useMemo(() => {
     return data.map(item => {
@@ -363,6 +419,9 @@ function GamingTable() {
         )
       )
     ),
+
+    // PAGINATION CONTROLS
+    renderPagination(),
     
     // TABLE
     React.createElement(
@@ -519,59 +578,60 @@ function GamingTable() {
     ),
   
     // PAGINATION CONTROLS
-    React.createElement(
-      "div",
-      {
-        style: {
-          marginTop: "1rem",
-          display: "flex",
-          justifyContent: "center",
-          gap: "1rem",
-        }
-      },
+    renderPagination(),
+    //React.createElement(
+    //  "div",
+    //  {
+    //    style: {
+    //      marginTop: "1rem",
+    //      display: "flex",
+    //      justifyContent: "center",
+    //      gap: "1rem",
+    //    }
+    //  },
     
-      React.createElement(
-        "button",
-        {
-          disabled: page === 1,
-          onClick: () => changePage(1)
-        },
-        "<< First"
-      ),
+    //  React.createElement(
+    //    "button",
+    //    {
+    //      disabled: page === 1,
+    //      onClick: () => changePage(1)
+    //    },
+    //    "<< First"
+    //  ),
     
-      React.createElement(
-        "button",
-        {
-          disabled: page === 1,
-          onClick: () => changePage(Math.max(1, page - 1))
-        },
-        "Prev"
-      ),
+    //  React.createElement(
+    //    "button",
+    //    {
+    //      disabled: page === 1,
+    //      onClick: () => changePage(Math.max(1, page - 1))
+    //    },
+    //    "Prev"
+    //  ),
     
-      React.createElement(
-        "span",
-        null,
-        `Page ${page} of ${totalPages}`
-      ),
+    //  React.createElement(
+    //    "span",
+    //    null,
+    //    `Page ${page} of ${totalPages}`
+    //  ),
     
-      React.createElement(
-        "button",
-        {
-          disabled: page === totalPages,
-          onClick: () => changePage(Math.min(totalPages, page + 1))
-        },
-        "Next"
-      ),
+    //  React.createElement(
+    //    "button",
+    //    {
+    //      disabled: page === totalPages,
+    //      onClick: () => changePage(Math.min(totalPages, page + 1))
+    //    },
+    //    "Next"
+    //  ),
     
-      React.createElement(
-        "button",
-        {
-          disabled: page === totalPages,
-          onClick: () => changePage(totalPages)
-        },
-        "Last >>"
-      )
-    )
+    //  React.createElement(
+    //    "button",
+    //    {
+    //      disabled: page === totalPages,
+    //      onClick: () => changePage(totalPages)
+    //    },
+    //    "Last >>"
+    //  )
+    //)
   );
 }
 
