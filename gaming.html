@@ -513,19 +513,74 @@ function GamingTable() {
     ),
   
     // PAGINATION CONTROLS
+    //React.createElement(
+    //  "div",
+    //  { style: { marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" } },
+    //  React.createElement(
+    //    "button",
+    //    { disabled: page === 1, onClick: () => setPage((p) => Math.max(1, p - 1)) },
+    //    "Prev"
+    //  ),
+    //  React.createElement("span", null, `Page ${page} of ${totalPages}`),
+    //  React.createElement(
+    //    "button",
+    //    { disabled: page === totalPages, onClick: () => setPage((p) => Math.min(totalPages, p + 1)) },
+    //    "Next"
+    //  )
+    //)
+
+    // PAGINATION CONTROLS
     React.createElement(
       "div",
-      { style: { marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" } },
+      {
+        style: {
+          marginTop: "1rem",
+          display: "flex",
+          justifyContent: "center",
+          gap: "1rem",
+        }
+      },
+    
       React.createElement(
         "button",
-        { disabled: page === 1, onClick: () => setPage((p) => Math.max(1, p - 1)) },
+        {
+          disabled: page === 1,
+          onClick: () => setPage(1)
+        },
+        "<< First"
+      ),
+    
+      React.createElement(
+        "button",
+        {
+          disabled: page === 1,
+          onClick: () => setPage((p) => Math.max(1, p - 1))
+        },
         "Prev"
       ),
-      React.createElement("span", null, `Page ${page} of ${totalPages}`),
+    
+      React.createElement(
+        "span",
+        null,
+        `Page ${page} of ${totalPages}`
+      ),
+    
       React.createElement(
         "button",
-        { disabled: page === totalPages, onClick: () => setPage((p) => Math.min(totalPages, p + 1)) },
+        {
+          disabled: page === totalPages,
+          onClick: () => setPage((p) => Math.min(totalPages, p + 1))
+        },
         "Next"
+      ),
+    
+      React.createElement(
+        "button",
+        {
+          disabled: page === totalPages,
+          onClick: () => setPage(totalPages)
+        },
+        "Last >>"
       )
     )
   );
