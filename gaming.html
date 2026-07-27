@@ -108,6 +108,15 @@ function GamingTable() {
     return url.replace(/^http:\/\//i, "https://");
   }
 
+  function changePage(newPage) {
+    setPage(newPage);
+  
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
   // After fetching data and setting it
   const processedData = React.useMemo(() => {
     return data.map(item => {
@@ -513,23 +522,6 @@ function GamingTable() {
     ),
   
     // PAGINATION CONTROLS
-    //React.createElement(
-    //  "div",
-    //  { style: { marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" } },
-    //  React.createElement(
-    //    "button",
-    //    { disabled: page === 1, onClick: () => setPage((p) => Math.max(1, p - 1)) },
-    //    "Prev"
-    //  ),
-    //  React.createElement("span", null, `Page ${page} of ${totalPages}`),
-    //  React.createElement(
-    //    "button",
-    //    { disabled: page === totalPages, onClick: () => setPage((p) => Math.min(totalPages, p + 1)) },
-    //    "Next"
-    //  )
-    //)
-
-    // PAGINATION CONTROLS
     React.createElement(
       "div",
       {
@@ -545,7 +537,7 @@ function GamingTable() {
         "button",
         {
           disabled: page === 1,
-          onClick: () => setPage(1)
+          onClick: () => changePage(1)
         },
         "<< First"
       ),
@@ -554,7 +546,7 @@ function GamingTable() {
         "button",
         {
           disabled: page === 1,
-          onClick: () => setPage((p) => Math.max(1, p - 1))
+          onClick: () => changePage(Math.max(1, page - 1))
         },
         "Prev"
       ),
@@ -569,7 +561,7 @@ function GamingTable() {
         "button",
         {
           disabled: page === totalPages,
-          onClick: () => setPage((p) => Math.min(totalPages, p + 1))
+          onClick: () => changePage(Math.min(totalPages, page + 1))
         },
         "Next"
       ),
@@ -578,7 +570,7 @@ function GamingTable() {
         "button",
         {
           disabled: page === totalPages,
-          onClick: () => setPage(totalPages)
+          onClick: () => changePage(totalPages)
         },
         "Last >>"
       )
