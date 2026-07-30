@@ -64,7 +64,7 @@ function GamingTable() {
     async function load() {
       try {
         const res = await fetch(
-          `https://bruncher-api.onrender.com/gaming/deals?currency=${currency}`
+          `https://bruncher-api-yztl.onrender.com/gaming/deals?currency=${currency}`
         );
         const json = await res.json();
         setData(json.deals || []);
