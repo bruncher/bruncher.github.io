@@ -33,6 +33,14 @@ function GamingTable() {
 
   const [genreDropdownOpen, setGenreDropdownOpen] = React.useState(false);
 
+  const [avgSources, setAvgSources] = React.useState([
+    "metacriticScore",
+    "steamRatingPercent"
+  ]);
+  
+  const [avgDropdownOpen, setAvgDropdownOpen] = React.useState(false);
+  const avgRef = React.useRef();
+
   const [currency, setCurrency] = React.useState("USD");
 
   const cellStyle = { 
@@ -90,10 +98,30 @@ function GamingTable() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  React.useEffect(() => {
+    function handleClickOutside(event) {
+      if (avgRef.current && !avgRef.current.contains(event.target)) {
+        setAvgDropdownOpen(false);
+      }
+    }
+  
+    document.addEventListener("mousedown", handleClickOutside);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const STORE_NAMES = {
     "steam": "Steam",
     "humble store": "Humble Store",
     "fanatical": "Fanatical",
+  };
+
+  const AVG_SOURCE_NAMES = {
+    metacriticScore: "Metacritic",
+    steamRatingPercent: "Steam",
+    dealRating: "Deal"
   };
 
   function normalizeStoreName(name) {
@@ -407,10 +435,109 @@ function GamingTable() {
         ),
       ),
   
-      // RIGHT SIDE: Rows per page
+      // RIGHT SIDE: Avg score + Rows per page
       React.createElement(
         "div",
-        { style: { display: "flex", flexDirection: "column", gap: "0.25rem" } },
+        {
+          style: {
+            display: "flex",
+            gap: "1rem",
+            alignItems: "flex-end"
+          }
+        },
+
+        // Avg Score dropdown
+        React.createElement(
+          "div",
+          {
+            ref: avgRef,
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.25rem",
+              position: "relative"
+            }
+          },
+      
+          React.createElement("strong", null, "Avg Score:"),
+      
+          React.createElement(
+            "div",
+            {
+              style: {
+                padding: "0.5rem",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                minWidth: "180px",
+                maxWidth: "220px",
+                cursor: "pointer",
+                userSelect: "none"
+              },
+              onClick: () => setAvgDropdownOpen(prev => !prev)
+            },
+      
+            avgSources.length
+              ? avgSources.map(source => AVG_SOURCE_NAMES[source]).join(", ")
+              : "Select scores..."
+          ),
+      
+          avgDropdownOpen &&
+            React.createElement(
+              "div",
+              {
+                style: {
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  background: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  zIndex: 10,
+                  padding: "0.5rem",
+                  minWidth: "160px",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.15)"
+                }
+              },
+      
+              [
+                ["metacriticScore", "Metacritic"],
+                ["steamRatingPercent", "Steam"],
+                ["dealRating", "Deal"]
+              ].map(([key, label]) =>
+                React.createElement(
+                  "label",
+                  {
+                    key,
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.25rem",
+                      cursor: "pointer"
+                    }
+                  },
+      
+                  React.createElement("input", {
+                    type: "checkbox",
+                    checked: avgSources.includes(key),
+                    onChange: () => {
+                      setAvgSources(prev => {
+                        if (prev.includes(key)) {
+                          // don't allow empty selection
+                          if (prev.length === 1) return prev;
+                          return prev.filter(x => x !== key);
+                        }
+                    
+                        return [...prev, key];
+                      });
+                    }
+                  }),
+      
+                  label
+                )
+              )
+            )
+        ),
+
         React.createElement("strong", null, "Rows per page:"),
         React.createElement(
           "select",
