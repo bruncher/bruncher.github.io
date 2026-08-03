@@ -203,28 +203,44 @@ function GamingTable() {
     return data.map(item => {
       const scores = [];
   
-      if (!isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0)
+      if (
+        avgSources.includes("metacriticScore") &&
+        !isNaN(Number(item.metacriticScore)) &&
+        Number(item.metacriticScore) > 0
+      ) {
         scores.push(Number(item.metacriticScore));
+      }
   
-      if (!isNaN(Number(item.steamRatingPercent)) && Number(item.steamRatingPercent) > 0)
+      if (
+        avgSources.includes("steamRatingPercent") &&
+        !isNaN(Number(item.steamRatingPercent)) &&
+        Number(item.steamRatingPercent) > 0
+      ) {
         scores.push(Number(item.steamRatingPercent));
+      }
   
-      if (item.dealRating != null)
+      if (
+        avgSources.includes("dealRating") &&
+        item.dealRating != null
+      ) {
         scores.push(Number(item.dealRating) * 10);
+      }
   
       return {
         ...item,
         storeName: STORE_NAMES[normalizeStoreName(item.storeName)] ?? item.storeName,
         year: item.steamMeta?.year ? Number(item.steamMeta.year) : null,
         genres: Array.isArray(item.steamMeta?.genres) ? item.steamMeta.genres : [],
-        avgScore: scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null,
+        avgScore: scores.length
+          ? scores.reduce((a, b) => a + b, 0) / scores.length
+          : null,
         metacriticScore:
           !isNaN(Number(item.metacriticScore)) && Number(item.metacriticScore) > 0
             ? Number(item.metacriticScore)
             : null,
       };
     });
-  }, [data]);
+  }, [data, avgSources]);
 
   const allGenres = React.useMemo(() => {
     const set = new Set();
