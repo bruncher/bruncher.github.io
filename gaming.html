@@ -575,28 +575,36 @@ function GamingTable() {
               display: "flex",
               flexDirection: "column",
               gap: "0.25rem",
-              justifyContent: "flex-end",
-              height: "100%"
+              minWidth: "120px"
             }
           },
           React.createElement("strong", null, "Require Scores:"),
           React.createElement(
-            "label",
+            "div",
             {
               style: {
+                height: "38px",
                 display: "flex",
-                alignItems: "center",
-                gap: "0.25rem",
-                cursor: "pointer",
-                height: "38px"
+                alignItems: "center"
               }
             },
-            React.createElement("input", {
-              type: "checkbox",
-              checked: requireAllAvgSources,
-              onChange: (e) => setRequireAllAvgSources(e.target.checked)
-            }),
-            "Yes"
+            React.createElement(
+              "label",
+              {
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.25rem",
+                  cursor: "pointer"
+                }
+              },
+              React.createElement("input", {
+                type: "checkbox",
+                checked: requireAllAvgSources,
+                onChange: (e) => setRequireAllAvgSources(e.target.checked)
+              }),
+              "Yes"
+            )
           )
         ),
 
