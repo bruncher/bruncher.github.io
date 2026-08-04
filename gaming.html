@@ -359,7 +359,14 @@ function GamingTable() {
       // LEFT SIDE: Genre, Year, Clear
       React.createElement(
         "div",
-        { style: { display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" } },
+        { 
+          style: { 
+            display: "flex", 
+            gap: "1rem", 
+            alignItems: "flex-start", 
+            flexWrap: "wrap" 
+          } 
+        },
     
       // Genre filter as dropdown with checkboxes
       React.createElement(
@@ -472,7 +479,7 @@ function GamingTable() {
           style: {
             display: "flex",
             gap: "1rem",
-            alignItems: "center"
+            alignItems: "flex-start"
           }
         },
 
@@ -575,7 +582,8 @@ function GamingTable() {
             style: {
               display: "flex",
               flexDirection: "column",
-              gap: "0.25rem"
+              gap: "0.25rem",
+              cursor: "pointer"
             }
           },
           React.createElement("strong", null, "Required:"),
@@ -583,7 +591,6 @@ function GamingTable() {
             "label",
             {
               style: {
-                padding: "0.5rem",
                 display: "flex",
                 alignItems: "center",
                 gap: "0.25rem",
