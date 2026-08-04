@@ -36,6 +36,7 @@ function GamingTable() {
   const [avgSources, setAvgSources] = React.useState([
     "metacriticScore",
     "steamRatingPercent"
+    "dealRating"
   ]);
 
   const [requireAllAvgSources, setRequireAllAvgSources] = React.useState(false);
@@ -442,7 +443,7 @@ function GamingTable() {
               { value: minYear, onChange: (e) => setMinYear(e.target.value), style: { padding: "0.5rem" } },
               [React.createElement("option", { key: "any", value: "" }, "Min")].concat(allYears.map(y => React.createElement("option", { key: y, value: y }, y)))
             ),
-            React.createElement("span", null, "to"),
+
             React.createElement(
               "select",
               { value: maxYear, onChange: (e) => setMaxYear(e.target.value), style: { padding: "0.5rem" } },
