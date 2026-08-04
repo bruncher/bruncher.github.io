@@ -37,6 +37,8 @@ function GamingTable() {
     "metacriticScore",
     "steamRatingPercent"
   ]);
+
+  const [requireAllAvgSources, setRequireAllAvgSources] = React.useState(false);
   
   const [avgDropdownOpen, setAvgDropdownOpen] = React.useState(false);
   const avgRef = React.useRef();
@@ -270,10 +272,21 @@ function GamingTable() {
       const passesYear =
         (!minYear || (y != null && y >= Number(minYear))) &&
         (!maxYear || (y != null && y <= Number(maxYear)));
+
+      // Avg score source filter
+      const passesAvgSources =
+        !requireAllAvgSources ||
+        avgSources.every(source => {
+          if (source === "dealRating") {
+            return item.dealRating != null;
+          }
+
+          return item[source] != null;
+        });
   
-      return passesGenre && passesYear;
+      return passesGenre && passesYear && passesAvgSources;
     });
-  }, [processedData, selectedGenres, minYear, maxYear]);
+  }, [processedData, selectedGenres, minYear, maxYear, avgSources, requireAllAvgSources]);
   
   // SORTED DATA (sort AFTER filtering)
   const sortedData = React.useMemo(() => {
@@ -554,6 +567,26 @@ function GamingTable() {
             )
         ),
 
+        // Require all checkbox
+        React.createElement(
+          "label",
+          {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: "0.25rem",
+              marginTop: "0.5rem",
+              cursor: "pointer"
+            }
+          },
+          React.createElement("input", {
+            type: "checkbox",
+            checked: requireAllAvgSources,
+            onChange: (e) => setRequireAllAvgSources(e.target.checked)
+          }),
+          "Require All"
+        ),
+
         // Rows per page drop-down
         React.createElement(
           "div",
@@ -565,7 +598,7 @@ function GamingTable() {
               position: "relative"
             }
           },
-          React.createElement("strong", null, "Rows per page:"),
+          React.createElement("strong", null, "Rows Per Page:"),
           React.createElement(
             "select",
             {
